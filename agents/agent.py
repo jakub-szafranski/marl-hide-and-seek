@@ -3,12 +3,10 @@ from .agent_position import AgentPosition
 from environment.action import Action
 from environment.state import BaseState
 from learning.learning_algorithm import LearningAlgorithm
-from action_selection.selection_algorithm import ActionSelectionStrategy
-
-from abc import ABC, abstractmethod
+from action_selection.action_selection_strategy import ActionSelectionStrategy
 
 
-class Agent(ABC):
+class Agent:
     def __init__(self, 
                  start_position: AgentPosition, 
                  learning_algorithm: LearningAlgorithm,
