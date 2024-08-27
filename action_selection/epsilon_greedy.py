@@ -1,10 +1,12 @@
-from .action_selection_strategy import SelectionAlgorithm
-from environment.state import BaseState
+from __future__ import annotations
+from typing import TYPE_CHECKING
+from action_selection.action_selection_strategy import ActionSelectionStrategy
 
-from environment.action import Action
+if TYPE_CHECKING:
+    from environment.state import BaseState
+    from environment.action import Action
 
-
-class EpsilonGreedy(SelectionAlgorithm):
+class EpsilonGreedy(ActionSelectionStrategy):
     def __init__(self, epsilon: float) -> None:
         self.epsilon: float = epsilon
 

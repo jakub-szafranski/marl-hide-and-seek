@@ -1,2 +1,3 @@
 venv/
-todo.txt
+todo.txt__pycache__/
+*.pyc

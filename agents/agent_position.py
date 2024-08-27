@@ -1,8 +1,10 @@
-from environment.action import Action
-
+from __future__ import annotations
 from dataclasses import dataclass
 import yaml
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from environment.action import Action
 
 @dataclass
 class AgentPosition:
@@ -22,5 +24,3 @@ class AgentPosition:
             self.x = max(self.x - 1, 0)
         elif action == Action.RIGHT:
             self.x = min(self.x + 1, self.config['grid_width'] - 1)
-            
-    

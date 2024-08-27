@@ -1,6 +1,9 @@
-from agents.trajectory import Trajectory
-
+from __future__ import annotations
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from agents.trajectory import Trajectory
 
 class LearningAlgorithm(ABC):
     def __init__(self, 
@@ -19,5 +22,3 @@ class LearningAlgorithm(ABC):
     @abstractmethod
     def get_value(self, state) -> float:
         pass
-
-    

@@ -1,8 +1,9 @@
-from .transition import Transition
-
-from dataclasses import dataclass
 from __future__ import annotations
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from agents.transition import Transition
 
 @dataclass 
 class Trajectory:

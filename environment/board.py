@@ -1,11 +1,12 @@
-from agents.agent import Agent
-from agents.agent_position import AgentPosition
-
+from __future__ import annotations
 import yaml
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from agents.agent import Agent, AgentPosition
 
 class Board:
-    def __init__(self, hider, seeker) -> None:
+    def __init__(self, hider: Agent, seeker: Agent) -> None:
         with open('config.yml', 'r') as file:
             self.config = yaml.safe_load(file)
 
@@ -25,10 +26,3 @@ class Board:
 
     def display(self):
         pass
-
-
-
-
-
-
-    

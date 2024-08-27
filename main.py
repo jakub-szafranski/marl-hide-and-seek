@@ -1,4 +1,4 @@
-from agents.agent import Agent
+from agents.agent import EpsilonGreedy
 
 import yaml
 
