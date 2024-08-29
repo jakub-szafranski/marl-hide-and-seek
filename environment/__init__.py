@@ -1,13 +1,15 @@
 from .action import Action
-from .board import Board
-
-# from .reward import Reward
+from .board import Board, GridCell
+from .reward import BaseReward, DurationReward, DummyReward
 from .state import BaseState
-
-# from .terminal_state import TerminalState
+from .terminal_state import BaseTerminalState
 
 __all__ = [
     "Action",
     "Board",
     "BaseState",
+    "GridCell",
+    "DurationReward",
+    "BaseReward",
+    "BaseTerminalState",
 ]
