@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from agents import Agent
+from agents import Agent, AgentRole
 
 
 class BaseReward(ABC):
@@ -17,8 +17,8 @@ class BaseReward(ABC):
 
 
 class DurationReward(BaseReward):
-    def __init__(self, agent_role: AgentRole):
-        super().__init__(agent_role)
+    def __init__(self, agent: Agent):
+        super().__init__(agent)
 
     def get_reward(self, state, action, next_state):
         if self.agent_role == AgentRole.HIDER:
