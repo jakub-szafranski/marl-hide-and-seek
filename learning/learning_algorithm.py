@@ -5,12 +5,14 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from agents import Trajectory
 
+
 class LearningAlgorithm(ABC):
-    def __init__(self, 
-                 learning_rate: float, 
-                 discount_factor: float, 
-                 epsilon: float,
-                 ) -> None:
+    def __init__(
+        self,
+        learning_rate: float,
+        discount_factor: float,
+        epsilon: float,
+    ) -> None:
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
         self.epsilon = epsilon

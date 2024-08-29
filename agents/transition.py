@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from environment import Action, BaseState
 
+
 @dataclass
 class Transition:
     state: BaseState

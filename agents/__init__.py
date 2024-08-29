@@ -3,4 +3,4 @@ from .agent import Agent
 from .trajectory import Trajectory
 from .transition import Transition
 
-__all__ = ['AgentPosition', 'Agent', 'Trajectory', 'Transition']
+__all__ = ["AgentPosition", "Agent", "Trajectory", "Transition"]

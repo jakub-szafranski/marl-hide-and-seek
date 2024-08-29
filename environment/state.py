@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from environment import Board
 
+
 class BaseState(ABC):
     @abstractmethod
     def get_state(self, board: Board) -> list:

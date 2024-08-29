@@ -7,19 +7,23 @@ if TYPE_CHECKING:
     from learning import LearningAlgorithm
     from action_selection import ActionSelectionStrategy
 
+
 class Agent:
-    def __init__(self, 
-                 start_position: AgentPosition, 
-                 learning_algorithm: LearningAlgorithm,
-                 action_selection_strategy: ActionSelectionStrategy, 
-                 ) -> None:
+    def __init__(
+        self,
+        start_position: AgentPosition,
+        learning_algorithm: LearningAlgorithm,
+        action_selection_strategy: ActionSelectionStrategy,
+    ) -> None:
         self.agent_position = start_position
-        self.learning_algorithm = learning_algorithm   
+        self.learning_algorithm = learning_algorithm
         self.action_selection_strategy = action_selection_strategy
         self.trajectory = Trajectory()
 
     def select_action(self, state: BaseState) -> Action:
-        return self.action_selection_strategy.select_action(state, self.learning_algorithm.q_values)
+        return self.action_selection_strategy.select_action(
+            state, self.learning_algorithm.q_values
+        )
 
     def update(self) -> None:
         self.learning_algorithm.update(self.trajectory)

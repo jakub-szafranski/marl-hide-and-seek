@@ -5,7 +5,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from agents import Transition
 
-@dataclass 
+
+@dataclass
 class Trajectory:
     transitions: list[Transition] = []
 
