@@ -2,11 +2,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from agents.agent import AgentPosition, Trajectory
-    from environment.action import Action
-    from environment.state import BaseState
-    from learning.learning_algorithm import LearningAlgorithm
-    from action_selection.action_selection_strategy import ActionSelectionStrategy
+    from agents import AgentPosition, Trajectory
+    from environment import Action, BaseState
+    from learning import LearningAlgorithm
+    from action_selection import ActionSelectionStrategy
 
 class Agent:
     def __init__(self, 

@@ -3,8 +3,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from environment.state import BaseState
-    from environment.action import Action
+    from environment import BaseState, Action
 
 class ActionSelectionStrategy(ABC):
     @abstractmethod

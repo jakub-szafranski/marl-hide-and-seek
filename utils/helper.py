@@ -1,10 +1,9 @@
-import importlib
 import random
 import yaml
+from typing import TYPE_CHECKING
 
-AgentPosition = importlib.import_module('agents.agent_position').AgentPosition
-
-
+if TYPE_CHECKING:
+    from agents import AgentPosition
 
 
 def generate_start_coordinates() -> tuple[AgentPosition, AgentPosition]:

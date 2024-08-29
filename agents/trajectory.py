@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from agents.transition import Transition
+    from agents import Transition
 
 @dataclass 
 class Trajectory:

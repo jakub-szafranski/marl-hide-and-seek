@@ -3,7 +3,7 @@ import yaml
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from agents.agent import Agent, AgentPosition
+    from agents import Agent, AgentPosition
 
 class Board:
     def __init__(self, hider: Agent, seeker: Agent) -> None:

@@ -4,7 +4,7 @@ import yaml
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from environment.action import Action
+    from environment import Action
 
 @dataclass
 class AgentPosition:

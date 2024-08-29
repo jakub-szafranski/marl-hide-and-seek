@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from environment.board import Board
+    from environment import Board
 
 class BaseState(ABC):
     @abstractmethod
