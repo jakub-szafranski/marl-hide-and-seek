@@ -13,18 +13,13 @@ class LearningAlgorithm(ABC):
         self,
         learning_rate: float,
         discount_factor: float,
+        default_q_value: float = 0.0,
     ) -> None:
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor
-        self.q_values = defaultdict(float)
+        self.q_values = defaultdict(lambda: defaultdict(lambda: default_q_value))
 
     @abstractmethod
     def update(self, trajectory: Trajectory) -> None:
         pass
-
-    @abstractmethod
-    def get_value(self, state: BaseState, action: Action) -> float:
-        return self.q_values[(state, action)]
-        # should it be a method that returns all q_values for a given state?
-        # should it be a method that returns the best action for a given state?
 

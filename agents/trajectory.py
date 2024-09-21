@@ -17,3 +17,6 @@ class Trajectory:
 
     def get_sub_trajectory(self, n: int) -> Trajectory:
         return Trajectory(self.transitions[-n:])
+    
+    def __len__(self) -> int:
+        return len(self.transitions)

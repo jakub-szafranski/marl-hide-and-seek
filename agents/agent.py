@@ -24,7 +24,7 @@ class Agent:
 
     def select_action(self, state: BaseState) -> Action:
         return self.action_selection_strategy.select_action(
-            state, self.learning_algorithm.q_values # q_values or get_value?
+            state, self.learning_algorithm.q_values
         )
 
     def update(self) -> None:

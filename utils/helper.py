@@ -13,7 +13,7 @@ def generate_start_coordinates() -> tuple[AgentPosition, AgentPosition]:
     grid_height = config["grid_height"]
     grid_width = config["grid_width"]
     detection_distance = config["detection_distance"]
-    wall_positions = config["wall_positions"]
+    wall_positions = config["walls"]
 
     while True:
         hider_x = random.randint(0, grid_width - 1)
@@ -25,6 +25,7 @@ def generate_start_coordinates() -> tuple[AgentPosition, AgentPosition]:
         if (
             (hider_x, hider_y) not in wall_positions
             and (seeker_x, seeker_y) not in wall_positions
-            and abs(hider_x - seeker_x) + abs(hider_y - seeker_y) > detection_distance
+            and abs(hider_x - seeker_x) > detection_distance
+            and abs(hider_y - seeker_y) > detection_distance
         ):
             return AgentPosition(hider_x, hider_y), AgentPosition(seeker_x, seeker_y)

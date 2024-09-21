@@ -1,0 +1,14 @@
+# Board configuration
+grid_width: 10
+grid_height: 10
+
+walls:
+  - [1, 1]
+  - [2, 2]
+  - [3, 3]
+  - [4, 4]
+  - [5, 5]
+
+
+# Game configuration
+detection_distance: 3

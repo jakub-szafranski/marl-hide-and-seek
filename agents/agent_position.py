@@ -15,13 +15,19 @@ class AgentPosition:
     def __post_init__(self):
         with open("config.yml", "r") as file:
             self.config = yaml.safe_load(file)
+        self.walls = self.config.get("walls", [])
 
     def update(self, action: Action) -> None:
+        new_x, new_y = self.x, self.y
+
         if action == Action.UP:
-            self.y = min(self.y + 1, self.config["grid_height"] - 1)
+            new_y = min(self.y + 1, self.config["grid_height"] - 1)
         elif action == Action.DOWN:
-            self.y = max(self.y - 1, 0)
+            new_y = max(self.y - 1, 0)
         elif action == Action.LEFT:
-            self.x = max(self.x - 1, 0)
+            new_x = max(self.x - 1, 0)
         elif action == Action.RIGHT:
-            self.x = min(self.x + 1, self.config["grid_width"] - 1)
+            new_x = min(self.x + 1, self.config["grid_width"] - 1)
+
+        if (new_x, new_y) not in self.walls:
+            self.x, self.y = new_x, new_y

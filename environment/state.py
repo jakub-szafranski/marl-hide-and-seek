@@ -23,7 +23,12 @@ class CoordinateState(BaseState):
         super().__init__(terminal_state)
 
     def get_state(self, board: Board) -> list:
-        return [board.hider.position.x, board.hider.position.y, board.seeker.position.x, board.seeker.position.y]
+        return [
+            board.hider.position.x, 
+            board.hider.position.y, 
+            board.seeker.position.x, 
+            board.seeker.position.y,
+            ]
     
 
 class StateFactory():
