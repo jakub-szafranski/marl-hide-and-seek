@@ -1,10 +1,10 @@
 from .learning_algorithm import LearningAlgorithm
+from environment import Action
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from agents import Trajectory
-    from environment import Action, BaseState
 
 
 class QLearning(LearningAlgorithm):
@@ -19,23 +19,32 @@ class QLearning(LearningAlgorithm):
 
     def update(self, trajectory: Trajectory) -> None:
         number_of_transitions = len(trajectory)
+        is_terminal = trajectory.transitions[-1].is_terminal
 
         # If the trajectory is not long enough, do not update the Q-values
-        if number_of_transitions < self.n_steps:  
+        if (
+            number_of_transitions < self.n_steps 
+            and not is_terminal
+            ):  
             return None
         
         n_step_trajectory = trajectory.get_sub_trajectory(self.n_steps)
-        
+        if is_terminal:
+            for index, transition in enumerate(n_step_trajectory.transitions):
+                self._update_q_values(n_step_trajectory[index:], is_terminal)
+        else:
+            self._update_q_values(n_step_trajectory, is_terminal)
+
+
+    def _update_q_values(self, n_step_trajectory: Trajectory, is_terminal: bool) -> None:
         update_state = n_step_trajectory.transitions[0].state
         update_action = n_step_trajectory.transitions[0].action
 
         n_step_return = 0
-        for i in range(self.n_steps):
-            if len(n_step_trajectory) < i:
-                break
-            n_step_return += self.discount_factor ** i * n_step_trajectory.transitions[i].reward
+        for i, transition in enumerate(n_step_trajectory.transitions):
+            n_step_return += self.discount_factor ** i * transition.reward
 
-        if not n_step_trajectory.transitions[-1].is_terminal:
+        if not is_terminal:
             next_state = n_step_trajectory.transitions[-1].next_state
             max_q_value = max(
                 self.q_values[next_state][action] for action in Action

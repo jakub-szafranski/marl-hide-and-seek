@@ -2,7 +2,7 @@ from .action import Action
 from .board import Board, GridCell
 from .reward import BaseReward, DurationReward
 from .state import BaseState
-from .terminal_state import BaseTerminalState
+from .terminal_state import BaseTerminalState, DetectionTerminalState, TerminalStateFactory
 
 __all__ = [
     "Action",
@@ -12,4 +12,6 @@ __all__ = [
     "DurationReward",
     "BaseReward",
     "BaseTerminalState",
+    "DetectionTerminalState",
+    "TerminalStateFactory",
 ]
