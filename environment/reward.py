@@ -28,3 +28,13 @@ class DurationReward(BaseReward):
 
     def get_terminal_reward(self):
         return 100
+    
+
+class RewardFactory:
+    REWARDS = {DurationReward.__name__: DurationReward}
+
+    @staticmethod
+    def get_reward(reward: str, agent: Agent) -> BaseReward:
+        if reward not in RewardFactory.REWARDS:
+            raise ValueError(f"Reward {reward} not found")
+        return RewardFactory.REWARDS[reward](agent)

@@ -11,8 +11,9 @@ class MonteCarlo(LearningAlgorithm):
         self,
         learning_rate: float,
         discount_factor: float,
+        default_q_value: float = 0.0,
     ) -> None:
-        super().__init__(learning_rate, discount_factor)
+        super().__init__(learning_rate, discount_factor, default_q_value)
 
     def update(self, trajectory: Trajectory) -> None:
         # Update only if the trajectory is complete

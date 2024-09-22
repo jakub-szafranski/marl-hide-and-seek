@@ -11,9 +11,10 @@ class Sarsa(LearningAlgorithm):
         self,
         learning_rate: float,
         discount_factor: float,
-        n_steps: int,
+        default_q_value: float = 0.0,
+        n_steps: int = 1,
     ) -> None:
-        super().__init__(learning_rate, discount_factor)
+        super().__init__(learning_rate, discount_factor, default_q_value)
         self.n_steps = n_steps
 
     def update(self, trajectory: Trajectory) -> None:

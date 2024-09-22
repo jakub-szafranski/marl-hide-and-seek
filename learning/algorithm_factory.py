@@ -5,12 +5,16 @@ from learning import (
     MonteCarlo,
 )
 
-# from .monte_carlo import MonteCarlo
-# from .sarsa import Sarsa
 
 class AlgorithmFactory:
-    LEARNING_ALGORITMHS = {Sarsa.__name__: Sarsa}
+    LEARNING_ALGORITHMS = {
+        Sarsa.__name__: Sarsa,
+        QLearning.__name__: QLearning,
+        MonteCarlo.__name__: MonteCarlo
+        }
     
     @staticmethod
-    def get_terminal_state(terminal_state: str) -> LearningAlgorithm:
-        return AlgorithmFactory.LEARNING_ALGORITMHS[terminal_state]
+    def get_algorithm(algorithm: str) -> LearningAlgorithm:
+        if algorithm not in AlgorithmFactory.LEARNING_ALGORITHMS:
+            raise ValueError(f"Algorithm {algorithm} not found")
+        return AlgorithmFactory.LEARNING_ALGORITMHS[algorithm]

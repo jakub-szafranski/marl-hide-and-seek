@@ -34,4 +34,6 @@ class TerminalStateFactory:
     
     @staticmethod
     def get_terminal_state(terminal_state: str) -> BaseTerminalState:
+        if terminal_state not in TerminalStateFactory.TERMINAL_STATES:
+            raise ValueError(f"Terminal state {terminal_state} not found")
         return TerminalStateFactory.TERMINAL_STATES[terminal_state]()

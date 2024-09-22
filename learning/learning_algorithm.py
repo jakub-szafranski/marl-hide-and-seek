@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from agents import Trajectory
-    from environment import Action, BaseState
 
 
 class LearningAlgorithm(ABC):
