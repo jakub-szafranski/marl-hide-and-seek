@@ -12,3 +12,4 @@ walls:
 
 # Game configuration
 detection_distance: 3
+total_episodes: 1000

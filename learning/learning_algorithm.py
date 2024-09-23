@@ -12,7 +12,7 @@ class LearningAlgorithm(ABC):
         self,
         learning_rate: float,
         discount_factor: float,
-        default_q_value: float = 0.0,
+        default_q_value: float,
     ) -> None:
         self.learning_rate = learning_rate
         self.discount_factor = discount_factor

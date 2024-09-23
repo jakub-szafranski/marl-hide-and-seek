@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from agents import AgentPosition, Trajectory, AgentRole
-    from environment import Action, BaseState
+    from environment import Action, BaseState, BaseReward
     from learning import LearningAlgorithm
     from action_selection import ActionSelectionStrategy
 
@@ -14,12 +14,16 @@ class Agent:
         agent_role: AgentRole,
         learning_algorithm: LearningAlgorithm,
         action_selection_strategy: ActionSelectionStrategy,
+        state_processor: BaseState,
+        reward_strategy: BaseReward,
         start_position: AgentPosition = None,
     ) -> None:
         self.agent_role = agent_role
-        self.position = start_position
         self.learning_algorithm = learning_algorithm
         self.action_selection_strategy = action_selection_strategy
+        self.state_processor = state_processor
+        self.reward_strategy = reward_strategy
+        self.position = start_position
         self.trajectory = Trajectory()
 
     def select_action(self, state: BaseState) -> Action:

@@ -4,9 +4,11 @@ from enum import Enum
 import numpy as np
 from typing import TYPE_CHECKING
 
+from utils import generate_start_coordinates
+
 if TYPE_CHECKING:
     from agents import Agent
-    from utils import generate_start_coordinates
+    from environment import Action
 
 
 class GridCell(Enum):
@@ -16,43 +18,73 @@ class GridCell(Enum):
     WALL = 3
 
 
+class BoardBuilder:
+    @staticmethod
+    def build_grid(self, hider: Agent, seeker: Agent, config: dict, initialize_coordinates: bool = True) -> np.ndarray:
+        if initialize_coordinates:
+            self._initialize_agents_positions()
+        
+        grid = np.zeros((config["grid_height"], config["grid_width"]))
+        for wall_position in config["walls"]:
+            x, y = wall_position
+            grid[x, y] = GridCell.WALL.value
+
+        if hider.position and seeker.position:
+            grid[hider.position.x, hider.position.y] = GridCell.HIDER.value
+            grid[seeker.position.x, seeker.position.y] = GridCell.SEEKER.value
+
+        return grid
+
+    def _initialize_agents_positions(self, hider: Agent, seeker: Agent) -> None:
+        hider_position, seeker_position = generate_start_coordinates()
+        hider.position = hider_position
+        seeker.position = seeker_position
+
+
 class Board:
-    def __init__(self, hider: Agent, seeker: Agent) -> None:
+    def __init__(self, hider: Agent, seeker: Agent,) -> None:
         with open("config.yml", "r") as file:
             self.config = yaml.safe_load(file)
 
         self.hider = hider
         self.seeker = seeker
 
-        self.grid = self.build_grid()
+        self.grid = BoardBuilder.build_grid(
+            hider=self.hider,
+            seeker=self.seeker,
+            config=self.config,
+        )
 
-    def build_grid(self, initialize_coordinates: bool = True) -> np.ndarray:
-        if initialize_coordinates:
-            self._initialize_agents_positions()
+    def update(self) -> None:
+        self.hider.update()
+        self.seeker.update()
+
+        self.grid = self.BoardBuilder.build_grid(
+            hider=self.hider,
+            seeker=self.seeker,
+            config=self.config,
+            initialize_coordinates=False,
+            )
         
-        grid = np.zeros((self.config["grid_height"], self.config["grid_width"]))
-        for wall_position in self.config["walls"]:
-            x, y = wall_position
-            grid[x, y] = GridCell.WALL.value
-
-        if self.hider.position and self.seeker.position:
-            grid[self.hider.position.x, self.hider.position.y] = GridCell.HIDER.value
-            grid[self.seeker.position.x, self.seeker.position.y] = GridCell.SEEKER.value
-
-        return grid
-
-    def update_grid(self) -> None:
-        self.grid = self._build_grid(initialize_coordinates=False)
-
-    def _initialize_agents_positions(self) -> None:
-        hider_position, seeker_position = generate_start_coordinates()
-        self.hider.position = hider_position
-        self.seeker.position = seeker_position
+    def get_agent_state(self, agent: Agent) -> list:
+        return agent.state_processor.get_state(self)
+    
+    def get_agent_action(self, agent: Agent, state: list) -> Action:
+        return agent.select_action(state)
+    
+    def get_agent_reward(self, agent: Agent, state: list, action: Action, new_state: list) -> float:
+        return agent.reward_strategy.get_reward(state, action, new_state)
+    
+    def is_terminal(self) -> bool:
+        return self.seeker.state_processor.is_terminal(self) or self.hider.state_processor.is_terminal(self)
+    
+    def add_agent_transition(self, agent: Agent, state: list, action: Action, reward: float, new_state: list, is_terminal: bool) -> None:
+        agent.trajectory.add_transition(state, action, reward, new_state, is_terminal)
 
     def reset(self) -> None:
         self.hider.reset()
         self.seeker.reset()
-        self.update_grid()        
+        self.update_grid()      
 
 
 
