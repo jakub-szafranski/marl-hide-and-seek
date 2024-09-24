@@ -3,7 +3,7 @@ import yaml
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from agents import AgentPosition
+    from agents import AgentPosition, Trajectory
 
 
 def generate_start_coordinates() -> tuple[AgentPosition, AgentPosition]:
@@ -29,3 +29,6 @@ def generate_start_coordinates() -> tuple[AgentPosition, AgentPosition]:
             and abs(hider_y - seeker_y) > detection_distance
         ):
             return AgentPosition(hider_x, hider_y), AgentPosition(seeker_x, seeker_y)
+
+def calculate_episode_return(trajectory: Trajectory) -> float:
+    return sum(transition.reward for transition in trajectory.transitions)
