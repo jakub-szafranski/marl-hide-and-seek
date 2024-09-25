@@ -1,9 +1,7 @@
-from learning import (
-    LearningAlgorithm,
-    Sarsa,
-    QLearning,
-    MonteCarlo,
-)
+from .sarsa import Sarsa
+from .q_learning import QLearning
+from .monte_carlo import MonteCarlo
+from .learning_algorithm import LearningAlgorithm
 
 
 class AlgorithmFactory:
@@ -17,4 +15,4 @@ class AlgorithmFactory:
     def get_algorithm(algorithm: str) -> LearningAlgorithm:
         if algorithm not in AlgorithmFactory.LEARNING_ALGORITHMS:
             raise ValueError(f"Algorithm {algorithm} not found")
-        return AlgorithmFactory.LEARNING_ALGORITMHS[algorithm]
+        return AlgorithmFactory.LEARNING_ALGORITHMS[algorithm]

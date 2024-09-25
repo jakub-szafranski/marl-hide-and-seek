@@ -22,3 +22,8 @@ class LearningAlgorithm(ABC):
     def update(self, trajectory: Trajectory) -> None:
         pass
 
+    def load_prelearned_q_values(self, prelearned_q_values: dict) -> None:
+        for state in prelearned_q_values:
+            for action in prelearned_q_values[state]:
+                self.q_values[state][action] = prelearned_q_values[state][action]
+

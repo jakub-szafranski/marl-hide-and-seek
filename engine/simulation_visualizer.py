@@ -1,3 +1,4 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
@@ -18,8 +19,8 @@ class SimulationVisualizer(ABC):
 
 class GridVisualizer(SimulationVisualizer):
     def __init__(self) -> None:
-        self.fig, self.ax = plt.subplots()
         plt.ion()
+        self.fig, self.ax = plt.subplots()
 
     def update(self, board: Board, step_delay: float = 0.1) -> None:
         grid = board.grid
@@ -49,4 +50,4 @@ class SimulationVisualizerFactory:
     def get_visualizer(visualizer: str) -> SimulationVisualizer:
         if visualizer not in SimulationVisualizerFactory.VISUALIZERS:
             raise ValueError(f"Visualizer {visualizer} not found")
-        return SimulationVisualizerFactory.VISUALIZERS[visualizer]()
+        return SimulationVisualizerFactory.VISUALIZERS[visualizer]

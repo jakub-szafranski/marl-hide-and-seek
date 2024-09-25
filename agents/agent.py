@@ -1,8 +1,10 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+from .trajectory import Trajectory
+
 if TYPE_CHECKING:
-    from agents import AgentPosition, Trajectory, AgentRole
+    from agents import AgentPosition, AgentRole
     from environment import Action, BaseState, BaseReward
     from learning import LearningAlgorithm
     from action_selection import ActionSelectionStrategy

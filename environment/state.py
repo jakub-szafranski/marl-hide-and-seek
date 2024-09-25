@@ -11,7 +11,7 @@ class BaseState(ABC):
         self._terminal_state = terminal_state
 
     @abstractmethod
-    def get_state(self, board: Board) -> list:
+    def get_state(self, board: Board) -> tuple:
         pass
 
     def is_terminal(self, board: Board) -> bool:
@@ -22,13 +22,13 @@ class CoordinateState(BaseState):
     def __init__(self, terminal_state: BaseTerminalState) -> None:
         super().__init__(terminal_state)
 
-    def get_state(self, board: Board) -> list:
-        return [
+    def get_state(self, board: Board) -> tuple:
+        return (
             board.hider.position.x, 
             board.hider.position.y, 
             board.seeker.position.x, 
             board.seeker.position.y,
-            ]
+        )
     
 
 class StateFactory():

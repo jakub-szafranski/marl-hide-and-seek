@@ -1,10 +1,7 @@
-from __future__ import annotations
 from dataclasses import dataclass
 import yaml
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    from environment import Action
+from environment import Action
 
 
 @dataclass
@@ -29,5 +26,6 @@ class AgentPosition:
         elif action == Action.RIGHT:
             new_x = min(self.x + 1, self.config["grid_width"] - 1)
 
-        if (new_x, new_y) not in self.walls:
+        if [new_x, new_y] not in self.walls:
             self.x, self.y = new_x, new_y
+        

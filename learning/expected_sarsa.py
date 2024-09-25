@@ -1,3 +1,4 @@
+from __future__ import annotations
 from .learning_algorithm import LearningAlgorithm
 
 from typing import TYPE_CHECKING

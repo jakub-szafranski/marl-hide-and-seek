@@ -1,6 +1,9 @@
-from engine import SimulationVisualizer, SimulationDataCollector
+from __future__ import annotations
+from .simulation_visualizer import SimulationVisualizer
+from .simulation_data_collector import SimulationDataCollector
 from utils import Logger
 
+import yaml
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -19,6 +22,9 @@ class Simulation:
         self.simulation_visualizer = simulation_visualizer
         self.simulation_data_collector = simulation_data_collector
 
+        with open("config.yml", "r") as file:
+            self.config = yaml.safe_load(file)
+        
     def run(self) -> None:
         total_episodes = self.config["total_episodes"]
         log.info(f"Running simulation for {total_episodes} episodes.")
@@ -26,6 +32,10 @@ class Simulation:
             log.info(f"Running episode {episode}.")
             self._run_episode()
             self._reset()
+        
+        if self.simulation_data_collector:
+            self.simulation_data_collector.save_q_values(self.board)
+            self.simulation_data_collector.save_data(self.board)
 
     def _run_episode(self) -> None:
         """Run a single episode of the simulation."""

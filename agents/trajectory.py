@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from agents.transition import Transition
+from .transition import Transition
 
 if TYPE_CHECKING:
     from environment import Action
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 class Trajectory:
     transitions: list[Transition] = field(default_factory=list)
 
-    def add_transition(self, state: list, action: Action, reward: float, next_state: list, is_terminal: bool,) -> None:
+    def add_transition(self, state: tuple, action: Action, reward: float, next_state: tuple, is_terminal: bool,) -> None:
         transition = Transition(state, action, reward, next_state, is_terminal)
         self.transitions.append(transition)
 
@@ -20,3 +20,6 @@ class Trajectory:
     
     def __len__(self) -> int:
         return len(self.transitions)
+    
+    def __getitem__(self, index: int | slice) -> Trajectory:
+        return Trajectory(self.transitions[index])

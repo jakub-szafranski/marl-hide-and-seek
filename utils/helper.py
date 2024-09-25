@@ -1,9 +1,10 @@
 import random
 import yaml
-from typing import TYPE_CHECKING
+import json
+from collections import defaultdict
 
-if TYPE_CHECKING:
-    from agents import AgentPosition, Trajectory
+from agents import AgentPosition, Trajectory
+from environment import Action
 
 
 def generate_start_coordinates() -> tuple[AgentPosition, AgentPosition]:
@@ -30,5 +31,18 @@ def generate_start_coordinates() -> tuple[AgentPosition, AgentPosition]:
         ):
             return AgentPosition(hider_x, hider_y), AgentPosition(seeker_x, seeker_y)
 
+
 def calculate_episode_return(trajectory: Trajectory) -> float:
     return sum(transition.reward for transition in trajectory.transitions)
+
+def json_serializable_q_values(q_values: defaultdict) -> dict:
+    return {str(k): {action.value: v for action, v in actions.items()} for k, actions in q_values.items()}
+
+def load_prelearned_q_values(file_path: str) -> dict:
+    with open(file_path, "r") as file:
+        prelearned_q_values = json.load(file)
+    
+    prelearned_q_values["hider_q_values"] = {eval(k): {Action(int(action)): v for action, v in actions.items()} for k, actions in prelearned_q_values["hider_q_values"].items()}
+    prelearned_q_values["seeker_q_values"] = {eval(k): {Action(int(action)): v for action, v in actions.items()} for k, actions in prelearned_q_values["seeker_q_values"].items()}
+
+    return prelearned_q_values

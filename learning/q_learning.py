@@ -1,3 +1,4 @@
+from __future__ import annotations
 from .learning_algorithm import LearningAlgorithm
 from environment import Action
 

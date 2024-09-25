@@ -20,9 +20,9 @@ class GridCell(Enum):
 
 class BoardBuilder:
     @staticmethod
-    def build_grid(self, hider: Agent, seeker: Agent, config: dict, initialize_coordinates: bool = True) -> np.ndarray:
+    def build_grid(hider: Agent, seeker: Agent, config: dict, initialize_coordinates: bool = True) -> np.ndarray:
         if initialize_coordinates:
-            self._initialize_agents_positions()
+            BoardBuilder._initialize_agents_positions(hider=hider, seeker=seeker)
         
         grid = np.zeros((config["grid_height"], config["grid_width"]))
         for wall_position in config["walls"]:
@@ -35,7 +35,8 @@ class BoardBuilder:
 
         return grid
 
-    def _initialize_agents_positions(self, hider: Agent, seeker: Agent) -> None:
+    @staticmethod
+    def _initialize_agents_positions(hider: Agent, seeker: Agent) -> None:
         hider_position, seeker_position = generate_start_coordinates()
         hider.position = hider_position
         seeker.position = seeker_position
@@ -53,38 +54,41 @@ class Board:
             hider=self.hider,
             seeker=self.seeker,
             config=self.config,
+            initialize_coordinates=True,
         )
-
-    def update(self) -> None:
-        self.hider.update()
-        self.seeker.update()
-
-        self.grid = self.BoardBuilder.build_grid(
-            hider=self.hider,
-            seeker=self.seeker,
-            config=self.config,
-            initialize_coordinates=False,
-            )
         
-    def get_agent_state(self, agent: Agent) -> list:
+    def get_agent_state(self, agent: Agent) -> tuple:
         return agent.state_processor.get_state(self)
     
-    def get_agent_action(self, agent: Agent, state: list) -> Action:
+    def get_agent_action(self, agent: Agent, state: tuple) -> Action:
         return agent.select_action(state)
     
-    def get_agent_reward(self, agent: Agent, state: list, action: Action, new_state: list) -> float:
+    def get_agent_reward(self, agent: Agent, state: tuple, action: Action, new_state: tuple) -> float:
         return agent.reward_strategy.get_reward(state, action, new_state)
     
     def is_terminal(self) -> bool:
         return self.seeker.state_processor.is_terminal(self) or self.hider.state_processor.is_terminal(self)
     
-    def add_agent_transition(self, agent: Agent, state: list, action: Action, reward: float, new_state: list, is_terminal: bool) -> None:
+    def add_agent_transition(self, agent: Agent, state: tuple, action: Action, reward: float, new_state: tuple, is_terminal: bool) -> None:
         agent.trajectory.add_transition(state, action, reward, new_state, is_terminal)
+
+    def _update_grid(self, initialize_coordinates: bool = False) -> None:
+        self.grid = BoardBuilder.build_grid(
+            hider=self.hider,
+            seeker=self.seeker,
+            config=self.config,
+            initialize_coordinates=initialize_coordinates,
+            )
+        
+    def update(self) -> None:
+        self.hider.update()
+        self.seeker.update()
+        self._update_grid()
 
     def reset(self) -> None:
         self.hider.reset()
         self.seeker.reset()
-        self.update_grid()      
+        self._update_grid(initialize_coordinates=True)      
 
 
 

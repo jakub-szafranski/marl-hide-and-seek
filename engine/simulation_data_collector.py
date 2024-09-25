@@ -1,7 +1,7 @@
-from utils import calculate_episode_return, Logger
+from __future__ import annotations
+from utils import calculate_episode_return, Logger, json_serializable_q_values
 
 import json
-from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -9,18 +9,10 @@ if TYPE_CHECKING:
 
 log = Logger(__name__)
 
-class SimulationVisualizer(ABC):
-    @abstractmethod
-    def collect_data(self, board: "Board") -> None:
-        pass
 
-    @abstractmethod
-    def save_data(self, file_path: str) -> None:
-        pass
-
-
-class SimulationDataCollector(SimulationVisualizer):
-    def __init__(self) -> None:
+class SimulationDataCollector:
+    def __init__(self, save_file_path: str = 'simulation_data.json') -> None:
+        self.file_path = save_file_path
         self.episode_lengths = []
         self.hider_returns = []
         self.seeker_returns = []
@@ -41,14 +33,31 @@ class SimulationDataCollector(SimulationVisualizer):
         seeker_return = calculate_episode_return(seeker_trajectory)
         self.seeker_returns.append(seeker_return)
 
-    def save_data(self, file_path: str) -> None:
+    def save_data(self) -> None:
         data = {
             "episode_lengths": self.episode_lengths,
             "hider_returns": self.hider_returns,
             "seeker_returns": self.seeker_returns,
         }
 
-        log.info(f"Saving data to {file_path}.")
-        with open(file_path, "w") as file:
+        log.info(f"Saving data to {self.file_path}.")
+        with open(self.file_path, "w") as file:
             json.dump(data, file)
         log.info("Data saved successfully.")
+
+    def save_q_values(self, board: Board) -> None:
+        hider_q_values = board.hider.learning_algorithm.q_values
+        hider_q_values = json_serializable_q_values(hider_q_values)
+
+        seeker_q_values = board.seeker.learning_algorithm.q_values
+        seeker_q_values = json_serializable_q_values(seeker_q_values)
+
+        data = {
+            "hider_q_values": hider_q_values,
+            "seeker_q_values": seeker_q_values,
+        }
+
+        log.info(f"Saving Q-values to q_values.json.")
+        with open("q_values.json", "w") as file:
+            json.dump(data, file)
+        log.info("Q-values saved successfully.")

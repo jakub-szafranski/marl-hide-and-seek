@@ -8,11 +8,11 @@ if TYPE_CHECKING:
 
 @dataclass
 class Transition:
-    state: list
+    state: tuple
     action: Action
     reward: int
-    next_state: list
+    next_state: tuple
     is_terminal: bool
 
-    def __iter__(self) -> iter[list, Action, int, list, bool]:
+    def __iter__(self) -> iter[tuple, Action, int, tuple, bool]:
         return iter((self.state, self.action, self.reward, self.next_state, self.is_terminal))
