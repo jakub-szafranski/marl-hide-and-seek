@@ -35,7 +35,7 @@ class Simulation:
         
         if self.simulation_data_collector:
             self.simulation_data_collector.save_q_values(self.board)
-            self.simulation_data_collector.save_data(self.board)
+            self.simulation_data_collector.save_data()
 
     def _run_episode(self) -> None:
         """Run a single episode of the simulation."""
@@ -66,7 +66,11 @@ class Simulation:
         reward_hider = self.board.get_agent_reward(hider, state_hider, action_hider, new_state_hider)
         reward_seeker = self.board.get_agent_reward(seeker, state_seeker, action_seeker, new_state_seeker)
 
-        is_terminal = self.board.is_terminal()
+        is_terminal, winner = self.board.is_terminal()
+        if is_terminal:
+            reward_hider += hider.reward_strategy.get_terminal_reward(winner)
+            reward_seeker += seeker.reward_strategy.get_terminal_reward(winner)
+
         self.board.add_agent_transition(hider, state_hider, action_hider, reward_hider, new_state_hider, is_terminal)
         self.board.add_agent_transition(seeker, state_seeker, action_seeker, reward_seeker, new_state_seeker, is_terminal)
 

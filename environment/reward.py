@@ -1,6 +1,11 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
 from agents import AgentRole
+
+if TYPE_CHECKING:
+    from environment import Action
 
 
 class BaseReward(ABC):
@@ -8,26 +13,29 @@ class BaseReward(ABC):
         self.agent_role = agent_role
 
     @abstractmethod
-    def get_reward(self, state, action, next_state):
-        pass
-
-    @abstractmethod
-    def get_terminal_reward(self):
+    def get_reward(self, state: tuple, action: Action, next_state: tuple) -> float:
         pass
 
 
 class DurationReward(BaseReward):
+    STEP_REWARD_HIDER = 1
+    STEP_REWARD_SEEKER = -1
+    TERMINAL_REWARD = 1000
+
     def __init__(self, agent_role: AgentRole):
         super().__init__(agent_role)
 
-    def get_reward(self, state, action, next_state):
+    def get_reward(self, state: tuple, action: Action, next_state: tuple) -> float:            
         if self.agent_role == AgentRole.HIDER:
-            return 1
+            return self.STEP_REWARD_HIDER
         elif self.agent_role == AgentRole.SEEKER:
-            return -1
+            return self.STEP_REWARD_SEEKER
 
-    def get_terminal_reward(self):
-        return 100
+    def get_terminal_reward(self, winner: AgentRole) -> float:
+        if self.agent_role == winner:
+            return self.TERMINAL_REWARD
+        else:
+            return -self.TERMINAL_REWARD
     
 
 class RewardFactory:

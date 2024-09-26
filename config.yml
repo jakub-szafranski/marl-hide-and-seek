@@ -23,6 +23,6 @@ walls:
 
 
 # Game configuration
-detection_distance: 3
-max_steps: 100
-total_episodes: 1000
+detection_distance: 1
+max_steps: 75
+total_episodes: 500_000

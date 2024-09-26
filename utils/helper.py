@@ -2,6 +2,7 @@ import random
 import yaml
 import json
 from collections import defaultdict
+import matplotlib.pyplot as plt
 
 from agents import AgentPosition, Trajectory
 from environment import Action
@@ -24,13 +25,12 @@ def generate_start_coordinates() -> tuple[AgentPosition, AgentPosition]:
         seeker_y = random.randint(0, grid_height - 1)
 
         if (
-            (hider_x, hider_y) not in wall_positions
-            and (seeker_x, seeker_y) not in wall_positions
+            [hider_x, hider_y] not in wall_positions
+            and [seeker_x, seeker_y] not in wall_positions
             and abs(hider_x - seeker_x) > detection_distance
             and abs(hider_y - seeker_y) > detection_distance
         ):
             return AgentPosition(hider_x, hider_y), AgentPosition(seeker_x, seeker_y)
-
 
 def calculate_episode_return(trajectory: Trajectory) -> float:
     return sum(transition.reward for transition in trajectory.transitions)

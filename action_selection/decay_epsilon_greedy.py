@@ -21,6 +21,13 @@ class DecayEpsilonGreedy(ActionSelectionStrategy):
         self.decay_rate = decay_rate
         self.min_epsilon = min_epsilon
 
+        if self.epsilon < self.min_epsilon:
+            raise ValueError("Initial epsilon must be greater than min epsilon.")
+        if self.decay_rate <= 0 or self.decay_rate >= 1:
+            raise ValueError("Decay rate must be in the range (0, 1).")
+        if self.min_epsilon < 0:
+            raise ValueError("Min epsilon must be greater than 0.")
+
     def select_action(self, state: BaseState, q_values: defaultdict) -> Action:
         if random.random() < self.epsilon:
             action = random.choice(list(Action))

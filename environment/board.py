@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from utils import generate_start_coordinates
 
 if TYPE_CHECKING:
-    from agents import Agent
+    from agents import Agent, AgentRole
     from environment import Action
 
 
@@ -16,6 +16,7 @@ class GridCell(Enum):
     HIDER = 1
     SEEKER = 2
     WALL = 3
+    SEEKER_VISION = 4
 
 
 class BoardBuilder:
@@ -25,14 +26,17 @@ class BoardBuilder:
             BoardBuilder._initialize_agents_positions(hider=hider, seeker=seeker)
         
         grid = np.zeros((config["grid_height"], config["grid_width"]))
-        for wall_position in config["walls"]:
-            x, y = wall_position
-            grid[x, y] = GridCell.WALL.value
 
         if hider.position and seeker.position:
+            detection_distance = config["detection_distance"]
+            BoardBuilder._draw_seeker_vision(grid, seeker, detection_distance)
             grid[hider.position.x, hider.position.y] = GridCell.HIDER.value
             grid[seeker.position.x, seeker.position.y] = GridCell.SEEKER.value
 
+        for wall_position in config["walls"]:
+            x, y = wall_position
+            grid[x, y] = GridCell.WALL.value
+            
         return grid
 
     @staticmethod
@@ -40,6 +44,17 @@ class BoardBuilder:
         hider_position, seeker_position = generate_start_coordinates()
         hider.position = hider_position
         seeker.position = seeker_position
+
+    @staticmethod
+    def _draw_seeker_vision(grid: np.ndarray, seeker: Agent, seeker_vision: int) -> np.ndarray:
+        seeker_position = seeker.position
+        for i in range(-seeker_vision, seeker_vision + 1):
+            for j in range(-seeker_vision, seeker_vision + 1):
+                if (
+                    0 <= seeker_position.x + i < grid.shape[0]
+                    and 0 <= seeker_position.y + j < grid.shape[1]
+                ):
+                    grid[seeker_position.x + i, seeker_position.y + j] = GridCell.SEEKER_VISION.value
 
 
 class Board:
@@ -66,8 +81,10 @@ class Board:
     def get_agent_reward(self, agent: Agent, state: tuple, action: Action, new_state: tuple) -> float:
         return agent.reward_strategy.get_reward(state, action, new_state)
     
-    def is_terminal(self) -> bool:
-        return self.seeker.state_processor.is_terminal(self) or self.hider.state_processor.is_terminal(self)
+    def is_terminal(self) -> tuple[bool, AgentRole | None]:
+        is_seeker_terminal, winner = self.seeker.state_processor.is_terminal(self)
+        is_hider_terminal, winner = self.hider.state_processor.is_terminal(self)
+        return is_seeker_terminal or is_hider_terminal, winner
     
     def add_agent_transition(self, agent: Agent, state: tuple, action: Action, reward: float, new_state: tuple, is_terminal: bool) -> None:
         agent.trajectory.add_transition(state, action, reward, new_state, is_terminal)

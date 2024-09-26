@@ -2,6 +2,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
+import numpy as np
 
 from environment import GridCell
 
@@ -18,29 +19,51 @@ class SimulationVisualizer(ABC):
 
 
 class GridVisualizer(SimulationVisualizer):
-    def __init__(self) -> None:
+    def __init__(self, step_delay: float = 0.1, terminal_delay: float = 2) -> None:
+        self.step_delay = step_delay
+        self.terminal_delay = terminal_delay
+
         plt.ion()
         self.fig, self.ax = plt.subplots()
 
-    def update(self, board: Board, step_delay: float = 0.1) -> None:
+    def update(self, board: Board) -> None:
         grid = board.grid
         self.ax.clear()
         cmap = ListedColormap(['white', 'blue', 'red', 'black'])
-        self.ax.imshow(grid, cmap=cmap, interpolation='none')
+
+        self.ax.imshow(grid == GridCell.WALL.value, cmap=ListedColormap(['white', 'black']), interpolation='none')
+
+        hider_positions = np.argwhere(grid == GridCell.HIDER.value)
+        seeker_positions = np.argwhere(grid == GridCell.SEEKER.value)
+        seeker_vision_positions = np.argwhere(grid == GridCell.SEEKER_VISION.value)
+
+        for pos in seeker_vision_positions:
+            rect = plt.Rectangle((pos[1] - 0.5, pos[0] - 0.5), 1, 1, color='red', alpha=0.3, linewidth=0)
+            self.ax.add_patch(rect)
+
+        for pos in seeker_positions:
+            rect = plt.Rectangle((pos[1] - 0.5, pos[0] - 0.5), 1, 1, color='red', alpha=0.3, linewidth=0)
+            self.ax.add_patch(rect)
+
+        self.ax.scatter(hider_positions[:, 1], hider_positions[:, 0], color='blue', label='Hider', s=300)
+        self.ax.scatter(seeker_positions[:, 1], seeker_positions[:, 0], color='red', label='Seeker', s=300)
+
         self.ax.set_title('Hide and Seek Simulation')
 
         legend_labels = {
-            GridCell.EMPTY.value: 'Empty',
             GridCell.HIDER.value: 'Hider',
             GridCell.SEEKER.value: 'Seeker',
-            GridCell.WALL.value: 'Wall'
+            GridCell.WALL.value: 'Wall',
         }
         handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=cmap(i), markersize=10, label=label)
                    for i, label in legend_labels.items()]
         self.ax.legend(handles=handles, loc='upper right')
-
+        
         plt.draw()
-        plt.pause(step_delay)
+        is_terminal, _ = board.is_terminal()
+        if is_terminal:
+            plt.pause(self.terminal_delay)
+        plt.pause(self.step_delay)
 
 
 class SimulationVisualizerFactory:

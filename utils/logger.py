@@ -1,5 +1,5 @@
 import logging
-from logging.handlers import RotatingFileHandler
+
 
 class Logger:
     def __init__(self, name: str, log_file: str = 'app.log', log_level: int = logging.INFO,) -> None:
@@ -12,7 +12,7 @@ class Logger:
         console_handler.setLevel(log_level)
         console_handler.setFormatter(formatter)
 
-        file_handler = RotatingFileHandler(log_file, maxBytes=1024 * 1024 * 5, backupCount=5)
+        file_handler = logging.FileHandler(log_file, mode='w')
         file_handler.setLevel(log_level)
         file_handler.setFormatter(formatter)
 

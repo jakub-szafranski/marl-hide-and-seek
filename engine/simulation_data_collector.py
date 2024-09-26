@@ -11,8 +11,9 @@ log = Logger(__name__)
 
 
 class SimulationDataCollector:
-    def __init__(self, save_file_path: str = 'simulation_data.json') -> None:
-        self.file_path = save_file_path
+    def __init__(self, data_file_path: str = 'simulation_data.json', q_values_file_path: str = 'q_values.json') -> None:
+        self.data_file_path = data_file_path
+        self.q_values_file_path = q_values_file_path
         self.episode_lengths = []
         self.hider_returns = []
         self.seeker_returns = []
@@ -40,8 +41,8 @@ class SimulationDataCollector:
             "seeker_returns": self.seeker_returns,
         }
 
-        log.info(f"Saving data to {self.file_path}.")
-        with open(self.file_path, "w") as file:
+        log.info(f"Saving data to {self.data_file_path}.")
+        with open(self.data_file_path, "w") as file:
             json.dump(data, file)
         log.info("Data saved successfully.")
 
@@ -57,7 +58,7 @@ class SimulationDataCollector:
             "seeker_q_values": seeker_q_values,
         }
 
-        log.info(f"Saving Q-values to q_values.json.")
-        with open("q_values.json", "w") as file:
+        log.info(f"Saving Q-values to {self.q_values_file_path}.")
+        with open(self.q_values_file_path, "w") as file:
             json.dump(data, file)
         log.info("Q-values saved successfully.")

@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from environment import Board, BaseTerminalState
+    from agents import AgentRole
 
 
 class BaseState(ABC):
@@ -14,7 +15,7 @@ class BaseState(ABC):
     def get_state(self, board: Board) -> tuple:
         pass
 
-    def is_terminal(self, board: Board) -> bool:
+    def is_terminal(self, board: Board) -> tuple[bool, AgentRole | None]:
         return self._terminal_state.is_terminal(board)
 
 
@@ -28,6 +29,7 @@ class CoordinateState(BaseState):
             board.hider.position.y, 
             board.seeker.position.x, 
             board.seeker.position.y,
+            len(board.seeker.trajectory)
         )
     
 
