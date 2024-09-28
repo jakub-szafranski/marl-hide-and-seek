@@ -30,22 +30,22 @@ def test_get_reward_seeker(seeker_reward):
 @pytest.mark.unit
 def test_get_terminal_reward_hider_wins(hider_reward):
     reward = hider_reward.get_terminal_reward(AgentRole.HIDER)
-    assert reward == 500
+    assert reward == 1000
 
 @pytest.mark.unit
 def test_get_terminal_reward_hider_loses(hider_reward):
     reward = hider_reward.get_terminal_reward(AgentRole.SEEKER)
-    assert reward == -500
+    assert reward == -1000
 
 @pytest.mark.unit
 def test_get_terminal_reward_seeker_wins(seeker_reward):
     reward = seeker_reward.get_terminal_reward(AgentRole.SEEKER)
-    assert reward == 500
+    assert reward == 1000
 
 @pytest.mark.unit
 def test_get_terminal_reward_seeker_loses(seeker_reward):
     reward = seeker_reward.get_terminal_reward(AgentRole.HIDER)
-    assert reward == -500
+    assert reward == -1000
 
 @pytest.mark.unit
 def test_reward_factory():

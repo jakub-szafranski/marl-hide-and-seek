@@ -10,6 +10,7 @@ def terminal_state():
 @pytest.fixture
 def board():
     mock_board = Mock()
+    mock_board.seeker.trajectory = [1]
     mock_board.hider.position.x = 1
     mock_board.hider.position.y = 2
     mock_board.seeker.position.x = 3
@@ -23,7 +24,7 @@ def coordinate_state(terminal_state):
 @pytest.mark.unit
 def test_get_state(coordinate_state, board):
     state = coordinate_state.get_state(board)
-    assert state == (1, 2, 3, 4)
+    assert state == (1, 2, 3, 4, 1)
 
 @pytest.mark.unit
 def test_is_terminal(coordinate_state, board, terminal_state):

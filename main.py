@@ -8,24 +8,28 @@ from utils import load_prelearned_q_values
 import yaml
 
 
-def main(initial_epsilon=1.0, visualize=False):
+def main(initial_epsilon=1.0, visualize=False, pretrained=False):
     # load pretrained q-values
-    prelearned_q_values = load_prelearned_q_values('q_values.json')
+    if pretrained:
+        prelearned_q_values = load_prelearned_q_values('q_values.json')
 
     # Create the hider agent
     terminal_state = TerminalStateFactory.get_terminal_state('DetectionTerminalState')
     terminal_state = terminal_state()
 
     hider_action_selection = ActionSelectionFactory.get_strategy("DecayEpsilonGreedy")
-    hider_action_selection = hider_action_selection(initial_epsilon=initial_epsilon, decay_rate=0.9999, min_epsilon=0.1)
+    hider_action_selection = hider_action_selection(initial_epsilon=initial_epsilon, decay_rate=0.99994, min_epsilon=0.001)
+    # hider_action_selection = ActionSelectionFactory.get_strategy("EpsilonGreedy")
+    # hider_action_selection = hider_action_selection(epsilon=initial_epsilon)
 
     hider_learning_algorithm = AlgorithmFactory.get_algorithm("QLearning")
     hider_learning_algorithm = hider_learning_algorithm(
         learning_rate=0.05,
         discount_factor=0.99,
         default_q_value=0.0, 
+        n_steps=5,
     )
-    if visualize:
+    if pretrained:
         hider_learning_algorithm.load_prelearned_q_values(prelearned_q_values['hider_q_values'])
 
     hider_state_processor = StateFactory.get_hider_state('CoordinateState')
@@ -44,15 +48,18 @@ def main(initial_epsilon=1.0, visualize=False):
     
     # Create the seeker agent
     seeker_action_selection = ActionSelectionFactory.get_strategy("DecayEpsilonGreedy")
-    seeker_action_selection = seeker_action_selection(initial_epsilon=initial_epsilon, decay_rate=0.9999, min_epsilon=0.1)
+    seeker_action_selection = seeker_action_selection(initial_epsilon=initial_epsilon, decay_rate=0.999994, min_epsilon=0.001)
+    # seeker_action_selection = ActionSelectionFactory.get_strategy("EpsilonGreedy")
+    # seeker_action_selection = seeker_action_selection(epsilon=initial_epsilon)
 
     seeker_learning_algorithm = AlgorithmFactory.get_algorithm("QLearning")
     seeker_learning_algorithm = seeker_learning_algorithm(
         learning_rate=0.05,
         discount_factor=0.99,
         default_q_value=0.0,
+        n_steps=5,
     )
-    if visualize:
+    if pretrained:
         seeker_learning_algorithm.load_prelearned_q_values(prelearned_q_values['seeker_q_values'])
 
     seeker_state_processor = StateFactory.get_seeker_state('CoordinateState')
@@ -98,5 +105,7 @@ def main(initial_epsilon=1.0, visualize=False):
 
 
 if __name__ == "__main__":
-    # main(initial_epsilon=0.001, visualize=True)
-    main(initial_epsilon=1.0, visualize=False)
+    main(initial_epsilon=0.001, visualize=True, pretrained=True)
+
+    # main(initial_epsilon=1.0, visualize=False, pretrained=True)
+    # main(initial_epsilon=0.1, visualize=False, pretrained=True)
