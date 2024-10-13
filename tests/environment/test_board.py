@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock, patch, mock_open
 import yaml
-from environment.board import Board
+from environment.board.board import Board
 
 
 @pytest.fixture

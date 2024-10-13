@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-import yaml
 from typing import TYPE_CHECKING
+
 
 if TYPE_CHECKING:
     from environment import Board, BaseTerminalState
@@ -20,7 +20,7 @@ class BaseState(ABC):
         return self._terminal_state.is_terminal(board)
 
 
-class CoordinateState(BaseState):
+class CompleteKnowledgeState(BaseState):
     def __init__(self, terminal_state: BaseTerminalState) -> None:
         super().__init__(terminal_state)
 
@@ -34,34 +34,82 @@ class CoordinateState(BaseState):
         )
     
 
-class SeekerVisionState(BaseState):
-    def __init__(self, terminal_state: BaseTerminalState, seeker_view_distance: int = 2) -> None:
+class PartialKnowledgeHider(BaseState):
+    def __init__(self, terminal_state: BaseTerminalState) -> None:
         super().__init__(terminal_state)
-        self.seeker_view_distance = seeker_view_distance
+    
+    def get_state(self, board: Board) -> tuple:
+        hider = board.hider
+        hider_x = hider.position.x
+        hider_y = hider.position.y
+        transition_number = len(hider.trajectory)
+
+        seeker = board.seeker
+        seeker_x = seeker.position.x
+        seeker_y = seeker.position.y
+        is_above = 1 if seeker_y < hider_y else 0
+        is_below = 1 if seeker_y > hider_y else 0
+        is_right = 1 if seeker_x > hider_x else 0
+        is_left = 1 if seeker_x < hider_x else 0
+        return (is_above, is_below, is_right, is_left, transition_number, hider_x, hider_y)
+
+
+class PartialKnowledgeSeeker(BaseState):
+    def __init__(self, terminal_state: BaseTerminalState) -> None:
+        super().__init__(terminal_state)
 
     def get_state(self, board: Board) -> tuple:
         seeker = board.seeker
-
-        grid = board.grid
         seeker_x = seeker.position.x
         seeker_y = seeker.position.y
+        transition_number = len(hider.trajectory)
 
-        seeker_upper_bound = min(seeker_y + self.seeker_view_distance, grid.shape[0])
-        seeker_lower_bound = max(seeker_y - self.seeker_view_distance, 0)
-        seeker_left_bound = max(seeker_x - self.seeker_view_distance, 0)
-        seeker_right_bound = min(seeker_x + self.seeker_view_distance, grid.shape[1])
-
-        seeker_view = grid[seeker_lower_bound:seeker_upper_bound + 1, seeker_left_bound:seeker_right_bound + 1]
-        seeker_view = seeker_view.flatten()
-        seeker_view = seeker_view.tolist()
-        seeker_view.append(len(seeker.trajectory))
-        return tuple(seeker_view)
-
+        hider = board.hider
+        hider_x = hider.position.x
+        hider_y = hider.position.y
+        is_above = 1 if seeker_y < hider_y else 0
+        is_below = 1 if seeker_y > hider_y else 0
+        is_right = 1 if seeker_x > hider_x else 0
+        is_left = 1 if seeker_x < hider_x else 0
+        return (is_above, is_below, is_right, is_left, transition_number, seeker_x, seeker_y)
     
 
+class DistanceStateSeeker(BaseState):
+    def __init__(self, terminal_state: BaseTerminalState) -> None:
+        super().__init__(terminal_state)
+    
+    def get_state(self, board: Board) -> tuple:
+        seeker_position = board.seeker.position
+        hider_position = board.hider.position
+        transition_number = len(board.seeker.directory)
+        x_distance = seeker_position.x - hider_position.x
+        y_distance = seeker_position.y - hider_position.y
+        return (x_distance, y_distance, transition_number, seeker_position.x, seeker_position.y)
+    
+
+class DistanceStateSeeker(BaseState):
+    def __init__(self, terminal_state: BaseTerminalState) -> None:
+        super().__init__(terminal_state)
+    
+    def get_state(self, board: Board) -> tuple:
+        seeker_position = board.seeker.position
+        hider_position = board.hider.position
+        transition_number = len(board.seeker.directory)
+        x_distance = seeker_position.x - hider_position.x
+        y_distance = seeker_position.y - hider_position.y
+        return (x_distance, y_distance, transition_number, hider_position.x, hider_position.y)
+    
+
+
 class StateFactory():
-    SEEKER_STATES = {CoordinateState.__name__: CoordinateState,}
-    HIDER_STATES = {CoordinateState.__name__: CoordinateState,}
+    SEEKER_STATES = {
+        CompleteKnowledgeState.__name__: CompleteKnowledgeState,
+        PartialKnowledgeSeeker.__name__: PartialKnowledgeSeeker,
+        }
+    HIDER_STATES = {
+        CompleteKnowledgeState.__name__: CompleteKnowledgeState,
+        PartialKnowledgeHider.__name__: PartialKnowledgeHider,
+        }
 
     @staticmethod
     def get_seeker_state(state_name: str) -> BaseState:

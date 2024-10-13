@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from environment import GridCell
+from agents import AgentRole
 
 from typing import TYPE_CHECKING
 
@@ -28,12 +29,17 @@ class GridVisualizer(SimulationVisualizer):
 
     def update(self, board: Board) -> None:
         grid = board.grid
+        is_terminal, winner = board.is_terminal()
+
         self.ax.clear()
         cmap = ListedColormap(['white', 'blue', 'red', 'black'])
 
         self.ax.imshow(grid == GridCell.WALL.value, cmap=ListedColormap(['white', 'black']), interpolation='none')
 
-        hider_positions = np.argwhere(grid == GridCell.HIDER.value)
+        if winner == AgentRole.SEEKER:
+            hider_positions = np.argwhere(grid == GridCell.HIDER_FOUND.value)
+        else:
+            hider_positions = np.argwhere(grid == GridCell.HIDER.value)
         seeker_positions = np.argwhere(grid == GridCell.SEEKER.value)
         seeker_vision_positions = np.argwhere(grid == GridCell.SEEKER_VISION.value)
 
@@ -44,6 +50,12 @@ class GridVisualizer(SimulationVisualizer):
         for pos in seeker_positions:
             rect = plt.Rectangle((pos[1] - 0.5, pos[0] - 0.5), 1, 1, color='red', alpha=0.3, linewidth=0)
             self.ax.add_patch(rect)
+
+        if is_terminal:
+            color = 'green' if winner == AgentRole.HIDER else 'red'
+            for pos in hider_positions:
+                rect = plt.Rectangle((pos[1] - 0.5, pos[0] - 0.5), 1, 1, color=color, alpha=0.6, linewidth=0)
+                self.ax.add_patch(rect)
 
         self.ax.scatter(hider_positions[:, 1], hider_positions[:, 0], color='blue', label='Hider', s=300)
         self.ax.scatter(seeker_positions[:, 1], seeker_positions[:, 0], color='red', label='Seeker', s=300)
@@ -60,7 +72,6 @@ class GridVisualizer(SimulationVisualizer):
         self.ax.legend(handles=handles, loc='upper right')
         
         plt.draw()
-        is_terminal, _ = board.is_terminal()
         if is_terminal:
             plt.pause(self.terminal_delay)
         plt.pause(self.step_delay)

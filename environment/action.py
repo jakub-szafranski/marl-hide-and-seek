@@ -6,3 +6,4 @@ class Action(Enum):
     DOWN = auto()
     LEFT = auto()
     RIGHT = auto()
+    STAY = auto()

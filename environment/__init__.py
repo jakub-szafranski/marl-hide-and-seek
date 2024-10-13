@@ -1,7 +1,7 @@
 from .action import Action
-from .board import (Board, GridCell, BoardBuilder,)
+from .board.board import (Board, BoardBuilder, GridCell)
 from .reward import (BaseReward, DurationReward, RewardFactory,)
-from .state import (BaseState, StateFactory, CoordinateState,)
+from .state import (BaseState, StateFactory, CompleteKnowledgeState,)
 from .terminal_state import (BaseTerminalState, DetectionTerminalState, TerminalStateFactory,)
 
 __all__ = [
@@ -15,7 +15,7 @@ __all__ = [
     "DetectionTerminalState",
     "TerminalStateFactory",
     "StateFactory",
-    "CoordinateState",
+    "CompleteKnowledgeState",
     "RewardFactory",
     "BoardBuilder",
 ]

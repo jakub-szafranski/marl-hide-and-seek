@@ -25,6 +25,8 @@ class AgentPosition:
             new_x = max(self.x - 1, 0)
         elif action == Action.RIGHT:
             new_x = min(self.x + 1, self.config["grid_width"] - 1)
+        elif action == Action.STAY:
+            new_x, new_y = self.x, self.y
 
         if [new_x, new_y] not in self.walls:
             self.x, self.y = new_x, new_y

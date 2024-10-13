@@ -5,10 +5,8 @@ from learning import AlgorithmFactory
 from agents import AgentRole, Agent
 from utils import load_prelearned_q_values
 
-import yaml
 
-
-def main(initial_epsilon=1.0, visualize=False, pretrained=False):
+def main(initial_epsilon=1.0, visualize=False, pretrained=False, min_epsilon=0.001):
     # load pretrained q-values
     if pretrained:
         prelearned_q_values = load_prelearned_q_values('q_values.json')
@@ -18,7 +16,7 @@ def main(initial_epsilon=1.0, visualize=False, pretrained=False):
     terminal_state = terminal_state()
 
     hider_action_selection = ActionSelectionFactory.get_strategy("DecayEpsilonGreedy")
-    hider_action_selection = hider_action_selection(initial_epsilon=initial_epsilon, decay_rate=0.99994, min_epsilon=0.001)
+    hider_action_selection = hider_action_selection(initial_epsilon=initial_epsilon, decay_rate=0.999, min_epsilon=min_epsilon)
     # hider_action_selection = ActionSelectionFactory.get_strategy("EpsilonGreedy")
     # hider_action_selection = hider_action_selection(epsilon=initial_epsilon)
 
@@ -32,7 +30,7 @@ def main(initial_epsilon=1.0, visualize=False, pretrained=False):
     if pretrained:
         hider_learning_algorithm.load_prelearned_q_values(prelearned_q_values['hider_q_values'])
 
-    hider_state_processor = StateFactory.get_hider_state('CoordinateState')
+    hider_state_processor = StateFactory.get_hider_state('CompleteKnowledgeState')
     hider_state_processor = hider_state_processor(terminal_state=terminal_state)
 
     hider_reward_strategy = RewardFactory.get_reward('DurationReward')
@@ -48,7 +46,7 @@ def main(initial_epsilon=1.0, visualize=False, pretrained=False):
     
     # Create the seeker agent
     seeker_action_selection = ActionSelectionFactory.get_strategy("DecayEpsilonGreedy")
-    seeker_action_selection = seeker_action_selection(initial_epsilon=initial_epsilon, decay_rate=0.999994, min_epsilon=0.001)
+    seeker_action_selection = seeker_action_selection(initial_epsilon=initial_epsilon, decay_rate=0.999, min_epsilon=min_epsilon)
     # seeker_action_selection = ActionSelectionFactory.get_strategy("EpsilonGreedy")
     # seeker_action_selection = seeker_action_selection(epsilon=initial_epsilon)
 
@@ -62,7 +60,7 @@ def main(initial_epsilon=1.0, visualize=False, pretrained=False):
     if pretrained:
         seeker_learning_algorithm.load_prelearned_q_values(prelearned_q_values['seeker_q_values'])
 
-    seeker_state_processor = StateFactory.get_seeker_state('CoordinateState')
+    seeker_state_processor = StateFactory.get_seeker_state('CompleteKnowledgeState')
     seeker_state_processor = seeker_state_processor(terminal_state=terminal_state)
 
     seeker_reward_strategy = RewardFactory.get_reward('DurationReward')
@@ -84,7 +82,7 @@ def main(initial_epsilon=1.0, visualize=False, pretrained=False):
     
     # Create the simulation visualizer and data collector
     simulation_visualizer = SimulationVisualizerFactory.get_visualizer('GridVisualizer')
-    simulation_visualizer = simulation_visualizer()
+    simulation_visualizer = simulation_visualizer(step_delay=0.2, terminal_delay=5)
 
     simulation_data_collector = SimulationDataCollector()
 
@@ -105,7 +103,7 @@ def main(initial_epsilon=1.0, visualize=False, pretrained=False):
 
 
 if __name__ == "__main__":
-    main(initial_epsilon=0.001, visualize=True, pretrained=True)
+    main(initial_epsilon=1.001, visualize=True, pretrained=True)
 
-    # main(initial_epsilon=1.0, visualize=False, pretrained=True)
+    # main(initial_epsilon=0.4, visualize=False, pretrained=True, min_epsilon=0.1)   
     # main(initial_epsilon=0.1, visualize=False, pretrained=True)

@@ -5,6 +5,7 @@ import yaml
 
 from utils import Logger
 from agents import AgentRole
+from environment import GridCell
 
 if TYPE_CHECKING:
     from environment import Board
@@ -27,13 +28,10 @@ class DetectionTerminalState(BaseTerminalState):
 
     def is_terminal(self, board: Board) -> tuple[bool, AgentRole | None]:
         hider_position = board.hider.position
-        seeker_position = board.seeker.position
+        is_found = board.grid[hider_position.x, hider_position.y] == GridCell.HIDER_FOUND.value
         winner = None
 
-        if (
-            abs(hider_position.x - seeker_position.x) <= self.detection_distance 
-            and abs(hider_position.y - seeker_position.y) <= self.detection_distance
-            ):
+        if is_found:
             winner = AgentRole.SEEKER
             return True, winner
         

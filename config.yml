@@ -3,12 +3,16 @@ grid_width: 7
 grid_height: 7
 
 walls:
-  - [2, 1]
+  - [2, 0]
   - [2, 2]
-  - [2, 3]
+  - [1, 2]
+  - [2, 1]
   - [1, 4]
-  - [2, 4]
   - [3, 4]
+  - [4, 4]
+  - [5, 5]
+  - [5, 4]
+  - [4, 1]
   # - [5, 7]
   # - [5, 8]
   # - [6, 7]
@@ -23,6 +27,6 @@ walls:
 
 
 # Game configuration
-detection_distance: 1
+detection_distance: 2
 max_steps: 30
-total_episodes: 1_000_000
+total_episodes: 100_000

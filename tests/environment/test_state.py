@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import Mock
-from environment.state import CoordinateState, StateFactory
+from environment.state import CompleteKnowledgeState, StateFactory
 from agents.agent_role import AgentRole
 
 @pytest.fixture
@@ -19,7 +19,7 @@ def board():
 
 @pytest.fixture
 def coordinate_state(terminal_state):
-    return CoordinateState(terminal_state)
+    return CompleteKnowledgeState(terminal_state)
 
 @pytest.mark.unit
 def test_get_state(coordinate_state, board):
@@ -36,7 +36,7 @@ def test_is_terminal(coordinate_state, board, terminal_state):
 @pytest.mark.unit
 def test_state_factory_get_seeker_state():
     state_class = StateFactory.get_seeker_state("CoordinateState")
-    assert state_class == CoordinateState
+    assert state_class == CompleteKnowledgeState
 
     with pytest.raises(ValueError):
         StateFactory.get_seeker_state("NonExistentState")
@@ -44,7 +44,7 @@ def test_state_factory_get_seeker_state():
 @pytest.mark.unit
 def test_state_factory_get_hider_state():
     state_class = StateFactory.get_hider_state("CoordinateState")
-    assert state_class == CoordinateState
+    assert state_class == CompleteKnowledgeState
 
     with pytest.raises(ValueError):
         StateFactory.get_hider_state("NonExistentState")

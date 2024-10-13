@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from environment import Board
+    from agents import Trajectory
 
 log = Logger(__name__)
 
@@ -17,7 +18,8 @@ class SimulationDataCollector:
         self.episode_lengths = []
         self.hider_returns = []
         self.seeker_returns = []
-
+        self.hider_actions = []
+        self.seeker_actions = []
 
     def collect_data(self, board: Board) -> None:
         hider_trajectory = board.hider.trajectory
@@ -26,19 +28,33 @@ class SimulationDataCollector:
         if len(hider_trajectory) != len(seeker_trajectory):
             raise ValueError("Trajectories have different lengths.")
 
+        self._collect_episode_length(hider_trajectory)
+        self._collect_episode_returns(hider_trajectory, seeker_trajectory)
+    
+    def _collect_episode_length(self, hider_trajectory: Trajectory) -> None:
         self.episode_lengths.append(len(hider_trajectory))
 
+    def _collect_episode_returns(self, hider_trajectory: Trajectory, seeker_trajectory: Trajectory) -> None:
         hider_return = calculate_episode_return(hider_trajectory)
         self.hider_returns.append(hider_return)
 
         seeker_return = calculate_episode_return(seeker_trajectory)
         self.seeker_returns.append(seeker_return)
+    
+    def _collect_taken_actions(self, hider_trajectory: Trajectory, seeker_trajectory: Trajectory) -> None:
+        hider_actions = [transition.action for transition in hider_trajectory]
+        seeker_actions = [transition.action for transition in seeker_trajectory]
 
+        self.hider_actions.extend(hider_actions)
+        self.seeker_actions.extend(seeker_actions)
+    
     def save_data(self) -> None:
         data = {
             "episode_lengths": self.episode_lengths,
             "hider_returns": self.hider_returns,
             "seeker_returns": self.seeker_returns,
+            "hider_actions": self.hider_actions,
+            "seeker_actions": self.seeker_actions,
         }
 
         log.info(f"Saving data to {self.data_file_path}.")
