@@ -1,5 +1,4 @@
 from __future__ import annotations
-from abc import ABC, abstractmethod
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,13 +12,7 @@ if TYPE_CHECKING:
     from environment import Board
 
 
-class SimulationVisualizer(ABC):
-    @abstractmethod
-    def update(self, board: Board) -> None:
-        pass
-
-
-class GridVisualizer(SimulationVisualizer):
+class SimulationVisualizer:
     def __init__(self, step_delay: float = 0.1, terminal_delay: float = 2) -> None:
         self.step_delay = step_delay
         self.terminal_delay = terminal_delay
@@ -75,13 +68,3 @@ class GridVisualizer(SimulationVisualizer):
         if is_terminal:
             plt.pause(self.terminal_delay)
         plt.pause(self.step_delay)
-
-
-class SimulationVisualizerFactory:
-    VISUALIZERS = {GridVisualizer.__name__: GridVisualizer}
-
-    @staticmethod
-    def get_visualizer(visualizer: str) -> SimulationVisualizer:
-        if visualizer not in SimulationVisualizerFactory.VISUALIZERS:
-            raise ValueError(f"Visualizer {visualizer} not found")
-        return SimulationVisualizerFactory.VISUALIZERS[visualizer]

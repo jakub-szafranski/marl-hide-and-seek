@@ -115,7 +115,7 @@ class Board:
     def add_agent_transition(self, agent: Agent, state: tuple, action: Action, reward: float, new_state: tuple, is_terminal: bool) -> None:
         agent.trajectory.add_transition(state, action, reward, new_state, is_terminal)
 
-    def _update_grid(self, initialize_coordinates: bool = False) -> None:
+    def update_grid(self, initialize_coordinates: bool = False) -> None:
         self.grid = BoardBuilder.build_grid(
             hider=self.hider,
             seeker=self.seeker,
@@ -123,15 +123,14 @@ class Board:
             initialize_coordinates=initialize_coordinates,
             )
         
-    def update(self) -> None:
+    def update_agents(self) -> None:
         self.hider.update()
         self.seeker.update()
-        self._update_grid()
 
     def reset(self) -> None:
         self.hider.reset()
         self.seeker.reset()
-        self._update_grid(initialize_coordinates=True)      
+        self.update_grid(initialize_coordinates=True)      
 
 
 

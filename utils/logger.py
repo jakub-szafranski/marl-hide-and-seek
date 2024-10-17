@@ -12,12 +12,7 @@ class Logger:
         console_handler.setLevel(log_level)
         console_handler.setFormatter(formatter)
 
-        file_handler = logging.FileHandler(log_file, mode='w')
-        file_handler.setLevel(log_level)
-        file_handler.setFormatter(formatter)
-
         self.logger.addHandler(console_handler)
-        self.logger.addHandler(file_handler)
 
     def debug(self, message: str) -> None:
         self.logger.debug(message)

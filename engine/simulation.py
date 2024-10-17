@@ -66,6 +66,8 @@ class Simulation:
         reward_hider = self.board.get_agent_reward(hider, state_hider, action_hider, new_state_hider)
         reward_seeker = self.board.get_agent_reward(seeker, state_seeker, action_seeker, new_state_seeker)
 
+        self.board.update_grid()
+
         is_terminal, winner = self.board.is_terminal()
         if is_terminal:
             reward_hider += hider.reward_strategy.get_terminal_reward(winner)
@@ -74,7 +76,7 @@ class Simulation:
         self.board.add_agent_transition(hider, state_hider, action_hider, reward_hider, new_state_hider, is_terminal)
         self.board.add_agent_transition(seeker, state_seeker, action_seeker, reward_seeker, new_state_seeker, is_terminal)
 
-        self.board.update()
+        self.board.update_agents()
         if self.simulation_visualizer:
             self.simulation_visualizer.update(self.board)
 

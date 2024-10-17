@@ -62,7 +62,7 @@ class PartialKnowledgeSeeker(BaseState):
         seeker = board.seeker
         seeker_x = seeker.position.x
         seeker_y = seeker.position.y
-        transition_number = len(hider.trajectory)
+        transition_number = len(seeker.trajectory)
 
         hider = board.hider
         hider_x = hider.position.x
