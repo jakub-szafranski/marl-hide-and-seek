@@ -4,7 +4,6 @@ from learning import AlgorithmFactory
 from agents import AgentRole, Agent
 from utils import load_prelearned_q_values
 
-
 import yaml
 
 def load_config(config_file):
@@ -36,10 +35,7 @@ def set_up_board(config):
     if config['from_pretrained']:
         hider_learning_algorithm.load_prelearned_q_values(prelearned_q_values['hider_q_values'])
 
-    if config['hider_state'] == "PartialKnowledge":
-        state_hider = "PartialKnowledgeHider"
-    else:
-        state_hider = "DistanceStateHider"
+    state_hider = "HearingStateHider"
     hider_state_processor = StateFactory.get_hider_state(state_hider)
     hider_state_processor = hider_state_processor(terminal_state)
 
@@ -78,10 +74,7 @@ def set_up_board(config):
     if config['from_pretrained']:
         seeker_learning_algorithm.load_prelearned_q_values(prelearned_q_values['seeker_q_values'])
 
-    if config['seeker_state'] == "PartialKnowledge":
-        state_seeker = "PartialKnowledgeSeeker"
-    else:
-        state_seeker = "DistanceStateSeeker"
+    state_seeker = "HearingStateSeeker"
     seeker_state_processor = StateFactory.get_seeker_state(state_seeker)
     seeker_state_processor = seeker_state_processor(terminal_state=terminal_state)
 

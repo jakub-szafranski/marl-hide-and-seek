@@ -15,9 +15,9 @@ walls:
   - [4, 1]
 
 # Konfiguracja gry
-detection_distance: 2
-max_steps: 30
-total_episodes: 100_000
+detection_distance: 2 # Zasieg detekcji agenta szukajacego
+max_steps: 20 # Maksymalna liczba krokow w grze - po jej przekroczeniu wygrywa chowający się
+total_episodes: 100_000 # Calkowita liczba tur w grze
 
 # Parametry wizualizacji
 step_delay: 0.1 # opoznienie dla 1 kroku
@@ -36,7 +36,7 @@ saving_file_path: "q_values.json"
 # -----------------------------------
 
 # Wybor Algorytmu uczenia, dostępne: "QLearning", "Sarsa", "MonteCarlo"
-seeker_learning_algorithm: "MonteCarlo" 
+seeker_learning_algorithm: "QLearning" 
 
 # wybor parametrow algorytmu uczenia:
 seeker_learning_rate: 0.05
@@ -46,12 +46,12 @@ seeker_n_step: 5 # Dotyczy tylko algorytmów: "QLearning", "Sarsa"
 
 # Wybor strategii wybierania akcji, dostepne: "EpsilonGreedy", "DecayEpsilonGreedy"
 seeker_action_selection_strategy: "EpsilonGreedy"
-seeker_initial_epsilon: 0.001
+seeker_initial_epsilon: 0.01
 seeker_decay_rate: 0.999 # Dotyczy tylko "DecayEpsilonGreedy"
-seeker_min_epsilon: 0.05 # Dotyczy tylko "DecayEpsilonGreedy"
+seeker_min_epsilon: 0.001 # Dotyczy tylko "DecayEpsilonGreedy"
 
-# Wybór definiowania stanu, dostepne: "PartialKnowledge", "DistanceState"
-seeker_state: "PartialKnowledge"
+# Wybór definiowania stanu, dostepne: "HearingStateSeeker"
+seeker_state: "HearingStateSeeker"
 
 # Wybór definiowania nagrod, dostepne: "DurationReward", "WinLoseReward"
 seeker_reward: "DurationReward"
@@ -75,8 +75,8 @@ hider_initial_epsilon: 1.0
 hider_decay_rate: 0.999 # Dotyczy tylko "DecayEpsilonGreedy"
 hider_min_epsilon: 0.99 # Dotyczy tylko "DecayEpsilonGreedy"
 
-# Wybór definiowania stanu, dostepne: "PartialKnowledge", "DistanceState"
-hider_state: "PartialKnowledge"
+# Wybór definiowania stanu, dostepne: "HearingStateHider"
+hider_state: "HearingStateHider"
 
 # Wybór definiowania nagrod, dostepne: "DurationReward", "WinLoseReward"
 hider_reward: "DurationReward"

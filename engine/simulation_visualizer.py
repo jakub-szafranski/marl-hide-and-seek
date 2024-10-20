@@ -2,9 +2,11 @@ from __future__ import annotations
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 
 from environment import GridCell
 from agents import AgentRole
+from utils.board_setup import load_config
 
 from typing import TYPE_CHECKING
 
@@ -19,6 +21,15 @@ class SimulationVisualizer:
 
         plt.ion()
         self.fig, self.ax = plt.subplots()
+
+        # Connect the close event to the handler
+        config = load_config('config.yml')
+        if config["visualize"]:
+            self.fig.canvas.mpl_connect('close_event', self._on_close)
+
+    def _on_close(self, event) -> None:
+        plt.close(self.fig)
+        sys.exit(0)
 
     def update(self, board: Board) -> None:
         grid = board.grid
@@ -53,6 +64,8 @@ class SimulationVisualizer:
         self.ax.scatter(hider_positions[:, 1], hider_positions[:, 0], color='blue', label='Hider', s=300)
         self.ax.scatter(seeker_positions[:, 1], seeker_positions[:, 0], color='red', label='Seeker', s=300)
 
+        self.ax.set_xticks([])
+        self.ax.set_yticks([])
         self.ax.set_title('Hide and Seek Simulation')
 
         legend_labels = {

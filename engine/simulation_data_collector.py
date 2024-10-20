@@ -12,7 +12,7 @@ log = Logger(__name__)
 
 
 class SimulationDataCollector:
-    def __init__(self, data_file_path: str = 'simulation_data.json', q_values_file_path: str = 'q_values.json') -> None:
+    def __init__(self, data_file_path: str | None = None, q_values_file_path: str = 'q_values.json') -> None:
         self.data_file_path = data_file_path
         self.q_values_file_path = q_values_file_path
         self.episode_lengths = []
@@ -56,11 +56,11 @@ class SimulationDataCollector:
             "hider_actions": self.hider_actions,
             "seeker_actions": self.seeker_actions,
         }
-
-        log.info(f"Saving data to {self.data_file_path}.")
-        with open(self.data_file_path, "w") as file:
-            json.dump(data, file)
-        log.info("Data saved successfully.")
+        if self.data_file_path:
+            log.info(f"Saving data to {self.data_file_path}.")
+            with open(self.data_file_path, "w") as file:
+                json.dump(data, file)
+            log.info("Data saved successfully.")
 
     def save_q_values(self, board: Board) -> None:
         hider_q_values = board.hider.learning_algorithm.q_values

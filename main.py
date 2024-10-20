@@ -1,4 +1,4 @@
-from engine import (Simulation, SimulationVisualizer, SimulationDataCollector,)
+from engine import (Simulation, SimulationVisualizer, SimulationDataCollector)
 
 from utils.board_setup import set_up_board, load_config
 
@@ -12,15 +12,21 @@ def main():
         terminal_delay=config["terminal_delay"],
     )
 
+    simulation_data_collector = SimulationDataCollector(
+        q_values_file_path=config["saving_file_path"],
+    )
+
     # Create the simulation
     if config["visualize"]:
         simulation = Simulation(
             board=board,
             simulation_visualizer=simulation_visualizer,
+            simulation_data_collector=simulation_data_collector,
             )
     else:
         simulation = Simulation(
             board=board,
+            simulation_data_collector=simulation_data_collector,
             )
     
     simulation.run()
