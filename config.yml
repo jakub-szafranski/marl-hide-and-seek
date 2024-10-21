@@ -22,14 +22,14 @@ total_episodes: 100_000 # Calkowita liczba tur w grze
 # Parametry wizualizacji
 step_delay: 0.1 # opoznienie dla 1 kroku
 terminal_delay: 5 # opoznienie po zakonczeniu tury
-visualize: true # Czy wizualizowac gre: false - nie, true - tak
+visualize: false # Czy wizualizowac gre: false - nie, true - tak
 
 # Czy uczyc agentów z wczesniej przeuczonych wartosci Q
 from_pretrained: true # false - nie, true - tak
 pretrained_file_name: "q_values.json" # jezeli tak - sciezka do json file z wartosciami
 
 # W jakiej nazwie pliku zapisac nauczone wartosci Q
-saving_file_path: "q_values.json"
+saving_file_path: "hider_random_q_values.json"
 
 # -----------------------------------
 # Konfiguracja agenta szukajacego
@@ -45,12 +45,12 @@ seeker_default_q_value: 0
 seeker_n_step: 5 # Dotyczy tylko algorytmów: "QLearning", "Sarsa"
 
 # Wybor strategii wybierania akcji, dostepne: "EpsilonGreedy", "DecayEpsilonGreedy"
-seeker_action_selection_strategy: "EpsilonGreedy"
-seeker_initial_epsilon: 0.01
-seeker_decay_rate: 0.999 # Dotyczy tylko "DecayEpsilonGreedy"
-seeker_min_epsilon: 0.001 # Dotyczy tylko "DecayEpsilonGreedy"
+seeker_action_selection_strategy: "DecayEpsilonGreedy"
+seeker_initial_epsilon: 0.6
+seeker_decay_rate: 0.99999 # Dotyczy tylko "DecayEpsilonGreedy"
+seeker_min_epsilon: 0.1 # Dotyczy tylko "DecayEpsilonGreedy"
 
-# Wybór definiowania stanu, dostepne: "HearingStateSeeker"
+# Wybór definiowania stanu, dostepne: "HearingStateSeeker", "DistanceStateSeeker", 'CompleteKnowledgeState'
 seeker_state: "HearingStateSeeker"
 
 # Wybór definiowania nagrod, dostepne: "DurationReward", "WinLoseReward"
@@ -75,7 +75,7 @@ hider_initial_epsilon: 1.0
 hider_decay_rate: 0.999 # Dotyczy tylko "DecayEpsilonGreedy"
 hider_min_epsilon: 0.99 # Dotyczy tylko "DecayEpsilonGreedy"
 
-# Wybór definiowania stanu, dostepne: "HearingStateHider"
+# Wybór definiowania stanu, dostepne: "HearingStateHider", "DistanceStateHider", 'CompleteKnowledgeState'
 hider_state: "HearingStateHider"
 
 # Wybór definiowania nagrod, dostepne: "DurationReward", "WinLoseReward"

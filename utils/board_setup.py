@@ -35,7 +35,14 @@ def set_up_board(config):
     if config['from_pretrained']:
         hider_learning_algorithm.load_prelearned_q_values(prelearned_q_values['hider_q_values'])
 
-    state_hider = "HearingStateHider"
+    if config["hider_state"] == "HearingStateHider":
+        state_hider = "HearingStateHider"
+    elif config["hider_state"] == "DistanceStateHider":
+        state_hider = "DistanceStateHider"
+    elif config["hider_state"] == "CompleteKnowledgeState":
+        state_hider = "CompleteKnowledgeState"
+    else:
+        raise ValueError("Invalid seeker state")
     hider_state_processor = StateFactory.get_hider_state(state_hider)
     hider_state_processor = hider_state_processor(terminal_state)
 
@@ -74,7 +81,14 @@ def set_up_board(config):
     if config['from_pretrained']:
         seeker_learning_algorithm.load_prelearned_q_values(prelearned_q_values['seeker_q_values'])
 
-    state_seeker = "HearingStateSeeker"
+    if config["seeker_state"] == "HearingStateSeeker":
+        state_seeker = "HearingStateSeeker"
+    elif config["seeker_state"] == "DistanceStateSeeker":
+        state_seeker = "DistanceStateSeeker"
+    elif config["seeker_state"] == "CompleteKnowledgeState":
+        state_seeker = "CompleteKnowledgeState"
+    else:
+        raise ValueError("Invalid seeker state")
     seeker_state_processor = StateFactory.get_seeker_state(state_seeker)
     seeker_state_processor = seeker_state_processor(terminal_state=terminal_state)
 
