@@ -3,10 +3,10 @@ from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
+import yaml
 
 from environment import GridCell
 from agents import AgentRole
-from utils.board_setup import load_config
 
 from typing import TYPE_CHECKING
 
@@ -23,7 +23,8 @@ class SimulationVisualizer:
         self.fig, self.ax = plt.subplots()
 
         # Connect the close event to the handler
-        config = load_config('config.yml')
+        with open('config.yml', 'r') as file:
+            config = yaml.safe_load(file)
         if config["visualize"]:
             self.fig.canvas.mpl_connect('close_event', self._on_close)
 

@@ -1,7 +1,6 @@
 from __future__ import annotations
 from .simulation_visualizer import SimulationVisualizer
 from .simulation_data_collector import SimulationDataCollector
-from utils import Logger
 
 import yaml
 from typing import TYPE_CHECKING
@@ -9,7 +8,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from environment import Board
 
-log = Logger(__name__)
 
 class Simulation:
     def __init__(
@@ -27,9 +25,9 @@ class Simulation:
         
     def run(self) -> None:
         total_episodes = self.config["total_episodes"]
-        log.info(f"Running simulation for {total_episodes} episodes.")
+        print(f"Running simulation for {total_episodes} episodes.")
         for episode in range(total_episodes):
-            log.info(f"Running episode {episode}.")
+            print(f"Running episode {episode}.", end="\r")
             self._run_episode()
             self._reset()
         

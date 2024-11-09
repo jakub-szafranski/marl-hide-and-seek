@@ -1,21 +1,29 @@
 from __future__ import annotations
 import yaml
 import numpy as np
+import random
+from enum import Enum
 from typing import TYPE_CHECKING
 
-from utils import generate_start_coordinates
-from .grid_cell import GridCell
+from agents import AgentPosition
 
 if TYPE_CHECKING:
     from agents import Agent, AgentRole
     from environment import Action
 
 
+class GridCell(Enum):
+    EMPTY = 0
+    HIDER = 1
+    SEEKER = 2
+    WALL = 3
+    SEEKER_VISION = 4
+    HIDER_FOUND = 5
+
 class BoardBuilder:
-    @staticmethod
-    def build_grid(hider: Agent, seeker: Agent, config: dict, initialize_coordinates: bool = True) -> np.ndarray:
+    def build_grid(self, hider: Agent, seeker: Agent, config: dict, initialize_coordinates: bool = True) -> np.ndarray:
         if initialize_coordinates:
-            BoardBuilder._initialize_agents_positions(hider=hider, seeker=seeker)
+            BoardBuilder._initialize_agents_positions(hider=hider, seeker=seeker, config=config)
         
         grid = np.zeros((config["grid_height"], config["grid_width"]))
         wall_positions = config["walls"]
@@ -37,8 +45,8 @@ class BoardBuilder:
         return grid
 
     @staticmethod
-    def _initialize_agents_positions(hider: Agent, seeker: Agent) -> None:
-        hider_position, seeker_position = generate_start_coordinates()
+    def _initialize_agents_positions(hider: Agent, seeker: Agent, config: dict) -> None:
+        hider_position, seeker_position = BoardBuilder._generate_start_coordinates(config)
         hider.position = hider_position
         seeker.position = seeker_position
 
@@ -82,6 +90,27 @@ class BoardBuilder:
                 y0 += sy
         return False
     
+    def _generate_start_coordinates(config) -> tuple[AgentPosition, AgentPosition]:
+        grid_height = config["grid_height"]
+        grid_width = config["grid_width"]
+        detection_distance = config["detection_distance"]
+        wall_positions = config["walls"]
+
+        while True:
+            hider_x = random.randint(0, grid_width - 1)
+            hider_y = random.randint(0, grid_height - 1)
+
+            seeker_x = random.randint(0, grid_width - 1)
+            seeker_y = random.randint(0, grid_height - 1)
+
+            if (
+                [hider_x, hider_y] not in wall_positions
+                and [seeker_x, seeker_y] not in wall_positions
+                and abs(hider_x - seeker_x) > detection_distance + 1
+                and abs(hider_y - seeker_y) > detection_distance + 1
+            ):
+                return AgentPosition(hider_x, hider_y), AgentPosition(seeker_x, seeker_y)
+    
 
 class Board:
     def __init__(self, hider: Agent, seeker: Agent,) -> None:
@@ -91,7 +120,7 @@ class Board:
         self.hider = hider
         self.seeker = seeker
 
-        self.grid = BoardBuilder.build_grid(
+        self.grid = BoardBuilder().build_grid(
             hider=self.hider,
             seeker=self.seeker,
             config=self.config,
@@ -116,7 +145,7 @@ class Board:
         agent.trajectory.add_transition(state, action, reward, new_state, is_terminal)
 
     def update_grid(self, initialize_coordinates: bool = False) -> None:
-        self.grid = BoardBuilder.build_grid(
+        self.grid = BoardBuilder().build_grid(
             hider=self.hider,
             seeker=self.seeker,
             config=self.config,
@@ -131,6 +160,4 @@ class Board:
         self.hider.reset()
         self.seeker.reset()
         self.update_grid(initialize_coordinates=True)      
-
-
 

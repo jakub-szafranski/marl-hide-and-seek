@@ -16,6 +16,12 @@ class BaseReward(ABC):
     def get_reward(self, state: tuple, action: Action, next_state: tuple) -> float:
         pass
 
+    def get_terminal_reward(self, winner: AgentRole) -> float:
+        if self.agent_role == winner:
+            return self.TERMINAL_REWARD
+        else:
+            return -self.TERMINAL_REWARD
+
 
 class DurationReward(BaseReward):
     STEP_REWARD_HIDER = 1
@@ -30,12 +36,6 @@ class DurationReward(BaseReward):
             return self.STEP_REWARD_HIDER
         elif self.agent_role == AgentRole.SEEKER:
             return self.STEP_REWARD_SEEKER
-
-    def get_terminal_reward(self, winner: AgentRole) -> float:
-        if self.agent_role == winner:
-            return self.TERMINAL_REWARD
-        else:
-            return -self.TERMINAL_REWARD
     
 
 class WinLoseReward(BaseReward):
@@ -46,12 +46,6 @@ class WinLoseReward(BaseReward):
 
     def get_reward(self, state: tuple, action: Action, next_state: tuple) -> float:            
         return 0
-
-    def get_terminal_reward(self, winner: AgentRole) -> float:
-        if self.agent_role == winner:
-            return self.TERMINAL_REWARD
-        else:
-            return -self.TERMINAL_REWARD
 
 
 class RewardFactory:
