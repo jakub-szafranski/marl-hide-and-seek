@@ -12,11 +12,9 @@ if TYPE_CHECKING:
 class LearningAlgorithm(ABC):
     def __init__(
         self,
-        learning_rate: float,
         discount_factor: float,
         default_q_value: float,
     ) -> None:
-        self.learning_rate = learning_rate
         self.discount_factor = discount_factor
         self.q_values = defaultdict(lambda: defaultdict(lambda: default_q_value))
 
@@ -33,11 +31,11 @@ class LearningAlgorithm(ABC):
 class MonteCarlo(LearningAlgorithm):
     def __init__(
         self,
-        learning_rate: float,
         discount_factor: float,
         default_q_value: float = 0.0,
     ) -> None:
-        super().__init__(learning_rate, discount_factor, default_q_value)
+        super().__init__(discount_factor, default_q_value)
+        self.visit_counts = defaultdict(lambda: defaultdict(int))
 
     def update(self, trajectory: Trajectory) -> None:
         # Update only if the trajectory is complete
@@ -51,32 +49,33 @@ class MonteCarlo(LearningAlgorithm):
             reward = transition.reward
 
             cumulative_reward = reward + self.discount_factor * cumulative_reward  
-            self.q_values[state][action] += self.learning_rate * (cumulative_reward - self.q_values[state][action])
+            self.visit_counts[state][action] += 1
+            self.q_values[state][action] += (cumulative_reward - self.q_values[state][action]) / self.visit_counts[state][action]
 
 
 class QLearning(LearningAlgorithm):
     def __init__(
         self,
-        learning_rate: float,
-        discount_factor: float,
+        learning_rate: float = 0.05,
+        discount_factor: float = 0.9,
         default_q_value: float = 0.0,
-        n_steps: int = 1,
     ) -> None:
-        super().__init__(learning_rate, discount_factor, default_q_value)
-        self.n_steps = n_steps
+        super().__init__(discount_factor, default_q_value)
+        self.learning_rate = learning_rate
 
     def update(self, trajectory: Trajectory) -> None:
+        n_steps = 1
         number_of_transitions = len(trajectory)
         is_terminal = trajectory.transitions[-1].is_terminal
 
         # If the trajectory is not long enough, do not update the Q-values
         if (
-            number_of_transitions < self.n_steps 
+            number_of_transitions < n_steps 
             and not is_terminal
             ):  
             return None
         
-        n_step_trajectory = trajectory.get_sub_trajectory(self.n_steps)
+        n_step_trajectory = trajectory.get_sub_trajectory(n_steps)
         if is_terminal:
             for index, transition in enumerate(n_step_trajectory.transitions):
                 self._update_q_values(n_step_trajectory[index:], is_terminal)
@@ -85,6 +84,7 @@ class QLearning(LearningAlgorithm):
 
 
     def _update_q_values(self, n_step_trajectory: Trajectory, is_terminal: bool) -> None:
+        n_steps = 1
         update_state = n_step_trajectory.transitions[0].state
         update_action = n_step_trajectory.transitions[0].action
 
@@ -97,7 +97,7 @@ class QLearning(LearningAlgorithm):
             max_q_value = max(
                 self.q_values[next_state][action] for action in Action
             )
-            n_step_return += self.discount_factor ** self.n_steps * max_q_value
+            n_step_return += self.discount_factor ** n_steps * max_q_value
 
         td_error = n_step_return - self.q_values[update_state][update_action]
         self.q_values[update_state][update_action] += self.learning_rate * td_error
@@ -106,26 +106,26 @@ class QLearning(LearningAlgorithm):
 class Sarsa(LearningAlgorithm):
     def __init__(
         self,
-        learning_rate: float,
-        discount_factor: float,
+        learning_rate: float = 0.05,
+        discount_factor: float = 0.9,
         default_q_value: float = 0.0,
-        n_steps: int = 1,
     ) -> None:
-        super().__init__(learning_rate, discount_factor, default_q_value)
-        self.n_steps = n_steps
+        super().__init__(discount_factor, default_q_value)
+        self.learning_rate = learning_rate
 
     def update(self, trajectory: Trajectory) -> None:
+        n_steps = 1
         number_of_transitions = len(trajectory)
         is_terminal = trajectory.transitions[-1].is_terminal
 
         # If the trajectory is not long enough, do not update the Q-values
         if (
-            number_of_transitions < self.n_steps + 1
+            number_of_transitions < n_steps + 1
             and not is_terminal
             ):  
             return None
         
-        n_step_trajectory = trajectory.get_sub_trajectory(self.n_steps + 1)
+        n_step_trajectory = trajectory.get_sub_trajectory(n_steps + 1)
         if is_terminal:
             for index, transition in enumerate(n_step_trajectory.transitions):
                 self._update_q_values(n_step_trajectory[index:], is_terminal)
@@ -134,6 +134,7 @@ class Sarsa(LearningAlgorithm):
 
 
     def _update_q_values(self, n_step_trajectory: Trajectory, is_terminal: bool) -> None:
+        n_steps = 1
         update_state = n_step_trajectory.transitions[0].state
         update_action = n_step_trajectory.transitions[0].action
 
@@ -150,7 +151,7 @@ class Sarsa(LearningAlgorithm):
             next_state = n_step_trajectory.transitions[-2].next_state
             next_action = n_step_trajectory.transitions[-1].action
 
-            n_step_return += self.discount_factor ** self.n_steps * self.q_values[next_state][next_action]
+            n_step_return += self.discount_factor ** n_steps * self.q_values[next_state][next_action]
 
         td_error = n_step_return - self.q_values[update_state][update_action]
         self.q_values[update_state][update_action] += self.learning_rate * td_error

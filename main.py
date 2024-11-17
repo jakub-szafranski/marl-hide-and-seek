@@ -34,12 +34,11 @@ def main():
 
     hider_learning_algorithm = AlgorithmFactory.get_algorithm(config['hider_learning_algorithm'])
     hider_learning_algorithm = hider_learning_algorithm(
-        learning_rate=config['hider_learning_rate'],
         discount_factor=config['hider_discount_factor'],
         default_q_value=config['hider_default_q_value'], 
     )
     if config['hider_learning_algorithm'] != "MonteCarlo":
-        hider_learning_algorithm.n_steps = config['hider_n_step']
+        hider_learning_algorithm.learning_rate = config['hider_learning_rate']
     if config['from_pretrained_hider']:
         hider_learning_algorithm.load_prelearned_q_values(prelearned_q_values_hider)
 
@@ -79,12 +78,11 @@ def main():
 
     seeker_learning_algorithm = AlgorithmFactory.get_algorithm(config['seeker_learning_algorithm'])
     seeker_learning_algorithm = seeker_learning_algorithm(
-        learning_rate=config['seeker_learning_rate'],
         discount_factor=config['seeker_discount_factor'],
         default_q_value=config['seeker_default_q_value'],
     )
     if config['seeker_learning_algorithm'] != "MonteCarlo":
-        seeker_learning_algorithm.n_steps = config['seeker_n_step']
+        seeker_learning_algorithm.learning_rate = config['seeker_learning_rate']
 
     if config['from_pretrained_seeker']:
         seeker_learning_algorithm.load_prelearned_q_values(prelearned_q_values_seeker)

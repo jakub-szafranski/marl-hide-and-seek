@@ -40,17 +40,16 @@ saving_file_path_seeker: "q_values_seeker.json"
 # -----------------------------------
 
 # Wybor Algorytmu uczenia, dostępne: "QLearning", "Sarsa", "MonteCarlo"
-seeker_learning_algorithm: "QLearning" 
+seeker_learning_algorithm: "MonteCarlo" 
 
 # wybor parametrow algorytmu uczenia:
-seeker_learning_rate: 0.05
+seeker_learning_rate: 0.05 # Dotyczy tylko algorytmów: "QLearning", "Sarsa"
 seeker_discount_factor: 0.99
 seeker_default_q_value: 100
-seeker_n_step: 5 # Dotyczy tylko algorytmów: "QLearning", "Sarsa"
 
 # Wybor strategii wybierania akcji, dostepne: "EpsilonGreedy", "DecayEpsilonGreedy"
 seeker_action_selection_strategy: "EpsilonGreedy"
-seeker_initial_epsilon: 0.3
+seeker_initial_epsilon: 0.001
 seeker_min_epsilon: 0.2 # Dotyczy tylko "DecayEpsilonGreedy"
 
 # Wybór definiowania stanu, dostepne: "HearingStateSeeker", "DistanceStateSeeker", 'CompleteKnowledgeState'
@@ -67,15 +66,14 @@ seeker_reward: "DurationReward"
 hider_learning_algorithm: "QLearning" 
 
 # wybor parametrow algorytmu uczenia:
-hider_learning_rate: 0.05
+hider_learning_rate: 0.05 # Dotyczy tylko algorytmów: "QLearning", "Sarsa"
 hider_discount_factor: 0.99
 hider_default_q_value: 100
-hider_n_step: 5 # Dotyczy tylko algorytmów: "QLearning", "Sarsa"
 
 # Wybor strategii wybierania akcji, dostepne: "EpsilonGreedy", "DecayEpsilonGreedy"
 hider_action_selection_strategy: "DecayEpsilonGreedy"
-hider_initial_epsilon: 0.3
-hider_min_epsilon: 0.2 # Dotyczy tylko "DecayEpsilonGreedy"
+hider_initial_epsilon: 0.001
+hider_min_epsilon: 0.00001 # Dotyczy tylko "DecayEpsilonGreedy"
 
 # Wybór definiowania stanu, dostepne: "HearingStateHider", "DistanceStateHider", 'CompleteKnowledgeState'
 hider_state: "HearingStateHider"
