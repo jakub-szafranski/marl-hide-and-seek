@@ -1,7 +1,7 @@
 from environment import (Board, SimulationDataCollector, SimulationVisualizer, Simulation)
 from agents import (AgentRole, Agent, AlgorithmFactory, ActionSelectionFactory, StateFactory, RewardFactory,)
 import json
-from environment import Action
+from agents.action import Action
 import yaml
 
 
@@ -16,10 +16,10 @@ def main():
     with open('config.yml', 'r') as file:
         config = yaml.safe_load(file)
 
-    if config['from_pretrained_hider']:
-        prelearned_q_values_hider = load_prelearned_q_values(config['pretrained_file_name_hider'])
-    if config['from_pretrained_seeker']:
-        prelearned_q_values_seeker = load_prelearned_q_values(config['pretrained_file_name_seeker'])
+    if config['hider_from_pretrained']:
+        prelearned_q_values_hider = load_prelearned_q_values(config['hider_pretrained_file_name'])
+    if config['seeker_from_pretrained']:
+        prelearned_q_values_seeker = load_prelearned_q_values(config['seeker_pretrained_file_name'])
 
     # Create the hider agent
     hider_action_selection = ActionSelectionFactory.get_strategy(config['hider_action_selection_strategy'])
@@ -39,7 +39,7 @@ def main():
     )
     if config['hider_learning_algorithm'] != "MonteCarlo":
         hider_learning_algorithm.learning_rate = config['hider_learning_rate']
-    if config['from_pretrained_hider']:
+    if config['hider_from_pretrained']:
         hider_learning_algorithm.load_prelearned_q_values(prelearned_q_values_hider)
 
     if config["hider_state"] == "HearingStateHider":
@@ -84,7 +84,7 @@ def main():
     if config['seeker_learning_algorithm'] != "MonteCarlo":
         seeker_learning_algorithm.learning_rate = config['seeker_learning_rate']
 
-    if config['from_pretrained_seeker']:
+    if config['seeker_from_pretrained']:
         seeker_learning_algorithm.load_prelearned_q_values(prelearned_q_values_seeker)
 
     if config["seeker_state"] == "HearingStateSeeker":
@@ -120,8 +120,9 @@ def main():
     )
 
     simulation_data_collector = SimulationDataCollector(
-        q_values_file_path_hider=config["saving_file_path_hider"],
-        q_values_file_path_seeker=config["saving_file_path_seeker"],
+        q_values_file_path_hider=config["hider_saving_file_path"],
+        q_values_file_path_seeker=config["seeker_saving_file_path"],
+        data_file_path=config["data_file_path"],
     )
 
     # Create the simulation

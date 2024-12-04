@@ -75,7 +75,7 @@ class Simulation:
         self.board.add_agent_transition(seeker, state_seeker, action_seeker, reward_seeker, new_state_seeker, is_terminal)
 
         self.board.update_agents()
-        if self.simulation_visualizer:
+        if self.simulation_visualizer and not is_terminal:
             self.simulation_visualizer.update(self.board)
 
         return is_terminal  

@@ -26,11 +26,13 @@ class SimulationDataCollector:
         if len(hider_trajectory) != len(seeker_trajectory):
             raise ValueError("Trajectories have different lengths.")
 
+
         self._collect_episode_length(hider_trajectory)
         self._collect_episode_returns(hider_trajectory, seeker_trajectory)
+        self._collect_taken_actions(hider_trajectory, seeker_trajectory)
     
     def _collect_episode_length(self, hider_trajectory: Trajectory) -> None:
-        self.episode_lengths.append(len(hider_trajectory))
+        self.episode_lengths.append(len(hider_trajectory) - 1)
 
     def _collect_episode_returns(self, hider_trajectory: Trajectory, seeker_trajectory: Trajectory) -> None:
         hider_return = self._calculate_episode_return(hider_trajectory)
@@ -40,8 +42,9 @@ class SimulationDataCollector:
         self.seeker_returns.append(seeker_return)
     
     def _collect_taken_actions(self, hider_trajectory: Trajectory, seeker_trajectory: Trajectory) -> None:
-        hider_actions = [transition.action for transition in hider_trajectory]
-        seeker_actions = [transition.action for transition in seeker_trajectory]
+
+        hider_actions = [transition.action.name for transition in hider_trajectory.transitions]
+        seeker_actions = [transition.action.name for transition in seeker_trajectory.transitions]
 
         self.hider_actions.extend(hider_actions)
         self.seeker_actions.extend(seeker_actions)

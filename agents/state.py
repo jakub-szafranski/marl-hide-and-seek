@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 import yaml
 from typing import TYPE_CHECKING
 
-from environment.action import Action 
+from agents.action import Action 
 from agents import AgentRole
 
 if TYPE_CHECKING:

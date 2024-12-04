@@ -1,0 +1,1 @@
+{"episode_lengths": [4, 4, 4], "hider_returns": [55, 55, 55], "seeker_returns": [-50, -50, -50], "hider_actions": ["LEFT", "DOWN", "UP", "UP", "UP", "UP", "UP", "UP", "UP", "UP", "UP", "UP", "UP", "UP", "UP"], "seeker_actions": ["DOWN", "STAY", "LEFT", "DOWN", "RIGHT", "UP", "LEFT", "STAY", "UP", "STAY", "RIGHT", "LEFT", "UP", "STAY", "RIGHT"]}

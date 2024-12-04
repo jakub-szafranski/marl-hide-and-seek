@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="72bd0079-6242-4716-9ac7-7731485e101e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/agents/action_selection_strategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/action_selection_strategy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/learning.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/learning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/reward.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/reward.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents/state.py" beforeDir="false" afterPath="$PROJECT_DIR$/agents/state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/environment/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/environment/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/environment/action.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/environment/board.py" beforeDir="false" afterPath="$PROJECT_DIR$/environment/board.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/environment/simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/environment/simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/environment/simulation_data_collector.py" beforeDir="false" afterPath="$PROJECT_DIR$/environment/simulation_data_collector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/q_values_hider.json" beforeDir="false" afterPath="$PROJECT_DIR$/q_values_hider.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/q_values_seeker.json" beforeDir="false" afterPath="$PROJECT_DIR$/q_values_seeker.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2pi7XtkP2AX8ihlNqBUNq9y33Ji" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="72bd0079-6242-4716-9ac7-7731485e101e" name="Changes" comment="" />
+      <created>1733237086795</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1733237086795</updated>
+    </task>
+    <servers />
+  </component>
+</project>

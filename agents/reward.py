@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from agents import AgentRole
 
 if TYPE_CHECKING:
-    from environment import Action
+    from agents.action import Action
 
 
 class BaseReward(ABC):
@@ -49,7 +49,10 @@ class WinLoseReward(BaseReward):
 
 
 class RewardFactory:
-    REWARDS = {DurationReward.__name__: DurationReward}
+    REWARDS = {
+        DurationReward.__name__: DurationReward,
+        WinLoseReward.__name__: WinLoseReward,
+        }
 
     @staticmethod
     def get_reward(reward: str) -> BaseReward:

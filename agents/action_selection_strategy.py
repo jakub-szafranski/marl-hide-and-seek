@@ -4,7 +4,7 @@ from collections import defaultdict
 import random
 from typing import TYPE_CHECKING
 
-from environment import Action
+from agents.action import Action
 if TYPE_CHECKING:
     from environment import BaseState
 

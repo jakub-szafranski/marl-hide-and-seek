@@ -9,7 +9,7 @@ from agents import AgentPosition
 
 if TYPE_CHECKING:
     from agents import Agent, AgentRole
-    from environment import Action
+    from agents.action import Action
 
 
 class GridCell(Enum):
@@ -67,7 +67,6 @@ class BoardBuilder:
 
     @staticmethod
     def _is_line_blocked(start, end, wall_positions):
-        """Check if the line from start to end is blocked by any wall."""
         x0, y0 = start
         x1, y1 = end
         dx = abs(x1 - x0)

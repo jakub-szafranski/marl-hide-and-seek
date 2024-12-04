@@ -5,7 +5,7 @@ from enum import Enum, auto
 from dataclasses import dataclass, field
 import yaml
 
-from environment import Action
+from agents.action import Action
 
 if TYPE_CHECKING:
     from agents import AgentPosition, LearningAlgorithm, ActionSelectionStrategy, BaseState, BaseReward

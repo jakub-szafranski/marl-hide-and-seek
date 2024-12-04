@@ -3,80 +3,91 @@ grid_width: 7
 grid_height: 7
 
 walls:
-  - [2, 0]
-  - [2, 2]
-  - [1, 2]
-  - [2, 1]
-  - [1, 4]
-  - [3, 4]
-  - [4, 4]
-  - [5, 5]
-  - [5, 4]
-  - [4, 1]
+  - [0, 0]
+  # - [1, 0]
+  # - [2, 2]
+  # - [1, 2]
+  # - [2, 1]
+  # - [1, 4]
+  # - [3, 4]
+  # - [4, 4]
+  # - [5, 5]
+  # - [5, 4]
+  # - [4, 1]
+  # - [2, 0]
+  # - [2, 1]
+  # - [2, 2] zalaczyc w repo plik tekstowy, wrzucic do adp, SCIANY!!! 1, ...N
+  # - [2, 3]
+  # - [4, 3]
+  # - [5, 3]
+  # - [6, 3]
 
 # Konfiguracja gry
 detection_distance: 2 # Zasieg detekcji agenta szukajacego
-max_steps: 20 # Maksymalna liczba krokow w grze - po jej przekroczeniu wygrywa chowający się
-total_episodes: 25 # Calkowita liczba tur w grze
+max_steps: 4 # Maksymalna liczba krokow w grze - po jej przekroczeniu wygrywa chowający się
+total_episodes: 3 # Calkowita liczba tur w grze
 
 # Parametry wizualizacji
 step_delay: 0.1 # opoznienie dla 1 kroku
 terminal_delay: 5 # opoznienie po zakonczeniu tury
 visualize: true # Czy wizualizowac gre: false - nie, true - tak
 
-# Czy uczyc agentów z wczesniej przeuczonych wartosci Q
-from_pretrained_hider: true # false - nie, true - tak
-pretrained_file_name_hider: "q_values_hider.json" # jezeli tak - sciezka do json file z wartosciami
+# Zapisywanie danych z symulacji
+data_file_path: "data_test.json" # Sciezka do pliku z zapisanymi danymi
 
-from_pretrained_seeker: true # false - nie, true - tak
-pretrained_file_name_seeker: "q_values_seeker.json" # jezeli tak - sciezka do json file z wartosciami
+# Czy uczyc agentów z wczesniej przeuczonych wartosci Q
+hider_from_pretrained: false # false - nie, true - tak
+hider_pretrained_file_name: "q_values_hider.json" # jezeli tak - sciezka do json file z wartosciami
+
+seeker_from_pretrained: false # false - nie, true - tak
+seeker_pretrained_file_name: "q_values_seeker.json" # jezeli tak - sciezka do json file z wartosciami
 
 # W jakiej nazwie pliku zapisac nauczone wartosci Q
-saving_file_path_hider: "q_values_hider.json"
-saving_file_path_seeker: "q_values_seeker.json"
+hider_saving_file_path: "q_values_hider.json"
+seeker_saving_file_path: "q_values_seeker.json"
 
 # -----------------------------------
 # Konfiguracja agenta szukajacego
 # -----------------------------------
 
 # Wybor Algorytmu uczenia, dostępne: "QLearning", "Sarsa", "MonteCarlo"
-seeker_learning_algorithm: "MonteCarlo" 
+seeker_learning_algorithm: "QLearning" 
 
 # wybor parametrow algorytmu uczenia:
-seeker_learning_rate: 0.05 # Dotyczy tylko algorytmów: "QLearning", "Sarsa"
-seeker_discount_factor: 0.99
+seeker_learning_rate: 0.1 # Dotyczy tylko algorytmów: "QLearning", "Sarsa"
+seeker_discount_factor: 0.9
 seeker_default_q_value: 100
 
 # Wybor strategii wybierania akcji, dostepne: "EpsilonGreedy", "DecayEpsilonGreedy"
 seeker_action_selection_strategy: "EpsilonGreedy"
-seeker_initial_epsilon: 0.001
-seeker_min_epsilon: 0.2 # Dotyczy tylko "DecayEpsilonGreedy"
+seeker_initial_epsilon: 1.0
+seeker_min_epsilon: 0 # Dotyczy tylko "DecayEpsilonGreedy"
 
 # Wybór definiowania stanu, dostepne: "HearingStateSeeker", "DistanceStateSeeker", 'CompleteKnowledgeState'
 seeker_state: "HearingStateSeeker"
 
 # Wybór definiowania nagrod, dostepne: "DurationReward", "WinLoseReward"
-seeker_reward: "DurationReward"
+seeker_reward: "WinLoseReward"
 
 # -----------------------------------
 # Konfiguracja agenta chowajacego
 # -----------------------------------
 
 # Wybor Algorytmu uczenia, dostępne: "QLearning", "Sarsa", "MonteCarlo"
-hider_learning_algorithm: "QLearning" 
+hider_learning_algorithm: "Sarsa" 
 
 # wybor parametrow algorytmu uczenia:
 hider_learning_rate: 0.05 # Dotyczy tylko algorytmów: "QLearning", "Sarsa"
 hider_discount_factor: 0.99
-hider_default_q_value: 100
+hider_default_q_value: 50
 
 # Wybor strategii wybierania akcji, dostepne: "EpsilonGreedy", "DecayEpsilonGreedy"
 hider_action_selection_strategy: "DecayEpsilonGreedy"
-hider_initial_epsilon: 0.001
-hider_min_epsilon: 0.00001 # Dotyczy tylko "DecayEpsilonGreedy"
+hider_initial_epsilon: 1.0
+hider_min_epsilon: 0 # Dotyczy tylko "DecayEpsilonGreedy"
 
 # Wybór definiowania stanu, dostepne: "HearingStateHider", "DistanceStateHider", 'CompleteKnowledgeState'
-hider_state: "HearingStateHider"
+hider_state: "CompleteKnowledgeState"
 
 # Wybór definiowania nagrod, dostepne: "DurationReward", "WinLoseReward"
 hider_reward: "DurationReward"

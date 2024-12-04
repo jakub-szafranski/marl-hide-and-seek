@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from collections import defaultdict
 from typing import TYPE_CHECKING
 
-from environment import Action
+from agents.action import Action
 
 if TYPE_CHECKING:
     from agents import Trajectory
