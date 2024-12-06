@@ -1,35 +1,27 @@
 # Konfiguracja planszy
-grid_width: 7
-grid_height: 7
+grid_width: 8
+grid_height: 8
 
 walls:
   - [0, 0]
-  # - [1, 0]
-  # - [2, 2]
-  # - [1, 2]
-  # - [2, 1]
-  # - [1, 4]
-  # - [3, 4]
-  # - [4, 4]
-  # - [5, 5]
-  # - [5, 4]
-  # - [4, 1]
-  # - [2, 0]
-  # - [2, 1]
-  # - [2, 2] zalaczyc w repo plik tekstowy, wrzucic do adp, SCIANY!!! 1, ...N
-  # - [2, 3]
-  # - [4, 3]
-  # - [5, 3]
-  # - [6, 3]
+  - [1, 0]
+  - [2, 2]
+  - [1, 2]
+  - [2, 1]
+  - [1, 4]
+  - [3, 4]
+  - [4, 4]
+  - [5, 5]
+  - [5, 4]
 
 # Konfiguracja gry
 detection_distance: 2 # Zasieg detekcji agenta szukajacego
-max_steps: 4 # Maksymalna liczba krokow w grze - po jej przekroczeniu wygrywa chowający się
-total_episodes: 3 # Calkowita liczba tur w grze
+max_steps: 25 # Maksymalna liczba krokow w grze - po jej przekroczeniu wygrywa chowający się
+total_episodes: 100 # Calkowita liczba tur w grze
 
 # Parametry wizualizacji
 step_delay: 0.1 # opoznienie dla 1 kroku
-terminal_delay: 5 # opoznienie po zakonczeniu tury
+terminal_delay: 4 # opoznienie po zakonczeniu tury
 visualize: true # Czy wizualizowac gre: false - nie, true - tak
 
 # Zapisywanie danych z symulacji
