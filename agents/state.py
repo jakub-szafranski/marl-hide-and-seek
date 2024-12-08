@@ -67,7 +67,7 @@ class DistanceStateSeeker(BaseState):
     def get_state(self, board: Board) -> tuple:
         seeker_position = board.seeker.position
         hider_position = board.hider.position
-        transition_number = len(board.seeker.directory)
+        transition_number = len(board.seeker.trajectory)
         x_distance = seeker_position.x - hider_position.x
         y_distance = seeker_position.y - hider_position.y
         return (x_distance, y_distance, transition_number, seeker_position.x, seeker_position.y)
@@ -80,7 +80,7 @@ class DistanceStateHider(BaseState):
     def get_state(self, board: Board) -> tuple:
         seeker_position = board.seeker.position
         hider_position = board.hider.position
-        transition_number = len(board.seeker.directory)
+        transition_number = len(board.seeker.trajectory)
         x_distance = seeker_position.x - hider_position.x
         y_distance = seeker_position.y - hider_position.y
         return (x_distance, y_distance, transition_number, hider_position.x, hider_position.y)
