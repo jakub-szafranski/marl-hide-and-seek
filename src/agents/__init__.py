@@ -17,6 +17,7 @@ from .state import (
     TerminalState,
 )
 from .reward import RewardFactory, BaseReward, WinLoseReward, DurationReward
+from .action import Action
 
 __all__ = [
     "AgentPosition",
@@ -45,4 +46,5 @@ __all__ = [
     "BaseReward",
     "WinLoseReward",
     "DurationReward",
+    "Action",
 ]
