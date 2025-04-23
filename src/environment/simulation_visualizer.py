@@ -5,13 +5,13 @@ import numpy as np
 import sys
 import yaml
 
-from environment import GridCell
-from agents import AgentRole
+from .board import GridCell
+from src.agents import AgentRole
 
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from environment import Board
+    from .board import Board
 
 
 class SimulationVisualizer:
@@ -23,10 +23,10 @@ class SimulationVisualizer:
         self.fig, self.ax = plt.subplots()
 
         # Connect the close event to the handler
-        with open('config.yml', 'r') as file:
+        with open("config.yml", "r") as file:
             config = yaml.safe_load(file)
         if config["visualize"]:
-            self.fig.canvas.mpl_connect('close_event', self._on_close)
+            self.fig.canvas.mpl_connect("close_event", self._on_close)
 
     def _on_close(self, event) -> None:
         plt.close(self.fig)
@@ -37,9 +37,9 @@ class SimulationVisualizer:
         is_terminal, winner = board.is_terminal()
 
         self.ax.clear()
-        cmap = ListedColormap(['white', 'blue', 'red', 'black'])
+        cmap = ListedColormap(["white", "blue", "red", "black"])
 
-        self.ax.imshow(grid == GridCell.WALL.value, cmap=ListedColormap(['white', 'black']), interpolation='none')
+        self.ax.imshow(grid == GridCell.WALL.value, cmap=ListedColormap(["white", "black"]), interpolation="none")
 
         if winner == AgentRole.SEEKER:
             hider_positions = np.argwhere(grid == GridCell.HIDER_FOUND.value)
@@ -49,35 +49,37 @@ class SimulationVisualizer:
         seeker_vision_positions = np.argwhere(grid == GridCell.SEEKER_VISION.value)
 
         for pos in seeker_vision_positions:
-            rect = plt.Rectangle((pos[1] - 0.5, pos[0] - 0.5), 1, 1, color='red', alpha=0.3, linewidth=0)
+            rect = plt.Rectangle((pos[1] - 0.5, pos[0] - 0.5), 1, 1, color="red", alpha=0.3, linewidth=0)
             self.ax.add_patch(rect)
 
         for pos in seeker_positions:
-            rect = plt.Rectangle((pos[1] - 0.5, pos[0] - 0.5), 1, 1, color='red', alpha=0.3, linewidth=0)
+            rect = plt.Rectangle((pos[1] - 0.5, pos[0] - 0.5), 1, 1, color="red", alpha=0.3, linewidth=0)
             self.ax.add_patch(rect)
 
         if is_terminal:
-            color = 'green' if winner == AgentRole.HIDER else 'red'
+            color = "green" if winner == AgentRole.HIDER else "red"
             for pos in hider_positions:
                 rect = plt.Rectangle((pos[1] - 0.5, pos[0] - 0.5), 1, 1, color=color, alpha=0.6, linewidth=0)
                 self.ax.add_patch(rect)
 
-        self.ax.scatter(hider_positions[:, 1], hider_positions[:, 0], color='blue', label='Hider', s=300)
-        self.ax.scatter(seeker_positions[:, 1], seeker_positions[:, 0], color='red', label='Seeker', s=300)
+        self.ax.scatter(hider_positions[:, 1], hider_positions[:, 0], color="blue", label="Hider", s=300)
+        self.ax.scatter(seeker_positions[:, 1], seeker_positions[:, 0], color="red", label="Seeker", s=300)
 
         self.ax.set_xticks([])
         self.ax.set_yticks([])
-        self.ax.set_title('Hide and Seek Simulation')
+        self.ax.set_title("Hide and Seek Simulation")
 
         legend_labels = {
-            GridCell.HIDER.value: 'Hider',
-            GridCell.SEEKER.value: 'Seeker',
-            GridCell.WALL.value: 'Wall',
+            GridCell.HIDER.value: "Hider",
+            GridCell.SEEKER.value: "Seeker",
+            GridCell.WALL.value: "Wall",
         }
-        handles = [plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=cmap(i), markersize=10, label=label)
-                   for i, label in legend_labels.items()]
-        self.ax.legend(handles=handles, loc='upper right')
-        
+        handles = [
+            plt.Line2D([0], [0], marker="o", color="w", markerfacecolor=cmap(i), markersize=10, label=label)
+            for i, label in legend_labels.items()
+        ]
+        self.ax.legend(handles=handles, loc="upper right")
+
         plt.draw()
         if is_terminal:
             plt.pause(self.terminal_delay)

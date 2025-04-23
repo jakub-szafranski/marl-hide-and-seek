@@ -5,11 +5,11 @@ from enum import Enum, auto
 from dataclasses import dataclass, field
 import yaml
 
-from agents.action import Action
+from src.agents.action import Action
 
 if TYPE_CHECKING:
-    from agents import AgentPosition, LearningAlgorithm, ActionSelectionStrategy, BaseState, BaseReward
-    
+    from src.agents import AgentPosition, LearningAlgorithm, ActionSelectionStrategy, BaseState, BaseReward
+
 
 class AgentRole(Enum):
     HIDER = auto()
@@ -42,7 +42,7 @@ class AgentPosition:
 
         if [new_x, new_y] not in self.walls:
             self.x, self.y = new_x, new_y
-        
+
 
 @dataclass
 class Transition:
@@ -60,16 +60,23 @@ class Transition:
 class Trajectory:
     transitions: list[Transition] = field(default_factory=list)
 
-    def add_transition(self, state: tuple, action: Action, reward: float, next_state: tuple, is_terminal: bool,) -> None:
+    def add_transition(
+        self,
+        state: tuple,
+        action: Action,
+        reward: float,
+        next_state: tuple,
+        is_terminal: bool,
+    ) -> None:
         transition = Transition(state, action, reward, next_state, is_terminal)
         self.transitions.append(transition)
 
     def get_sub_trajectory(self, n: int) -> Trajectory:
         return Trajectory(self.transitions[-n:])
-    
+
     def __len__(self) -> int:
         return len(self.transitions)
-    
+
     def __getitem__(self, index: int | slice) -> Trajectory:
         return Trajectory(self.transitions[index])
 
@@ -93,9 +100,7 @@ class Agent:
         self.trajectory = Trajectory()
 
     def select_action(self, state: BaseState) -> Action:
-        return self.action_selection_strategy.select_action(
-            state, self.learning_algorithm.q_values
-        )
+        return self.action_selection_strategy.select_action(state, self.learning_algorithm.q_values)
 
     def update(self) -> None:
         self.learning_algorithm.update(self.trajectory)

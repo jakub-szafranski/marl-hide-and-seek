@@ -1,45 +1,55 @@
-from environment import (Board, SimulationDataCollector, SimulationVisualizer, Simulation)
-from agents import (AgentRole, Agent, AlgorithmFactory, ActionSelectionFactory, StateFactory, RewardFactory,)
+from src.environment import Board, SimulationDataCollector, SimulationVisualizer, Simulation
+from src.agents import (
+    AgentRole,
+    Agent,
+    AlgorithmFactory,
+    ActionSelectionFactory,
+    StateFactory,
+    RewardFactory,
+)
 import json
-from agents.action import Action
+from src.agents.action import Action
 import yaml
 
 
 def load_prelearned_q_values(file_path: str) -> dict:
     with open(file_path, "r") as file:
         prelearned_q_values = json.load(file)
-    
-    prelearned_q_values = {eval(k): {Action(int(action)): v for action, v in actions.items()} for k, actions in prelearned_q_values.items()}
+
+    prelearned_q_values = {
+        eval(k): {Action(int(action)): v for action, v in actions.items()} for k, actions in prelearned_q_values.items()
+    }
     return prelearned_q_values
 
+
 def main():
-    with open('config.yml', 'r') as file:
+    with open("config.yml", "r") as file:
         config = yaml.safe_load(file)
 
-    if config['hider_from_pretrained']:
-        prelearned_q_values_hider = load_prelearned_q_values(config['hider_pretrained_file_name'])
-    if config['seeker_from_pretrained']:
-        prelearned_q_values_seeker = load_prelearned_q_values(config['seeker_pretrained_file_name'])
+    if config["hider_from_pretrained"]:
+        prelearned_q_values_hider = load_prelearned_q_values(config["hider_pretrained_file_name"])
+    if config["seeker_from_pretrained"]:
+        prelearned_q_values_seeker = load_prelearned_q_values(config["seeker_pretrained_file_name"])
 
     # Create the hider agent
-    hider_action_selection = ActionSelectionFactory.get_strategy(config['hider_action_selection_strategy'])
-    if config['hider_action_selection_strategy'] == "EpsilonGreedy":
-        hider_action_selection = hider_action_selection(epsilon=config['seeker_initial_epsilon'])
+    hider_action_selection = ActionSelectionFactory.get_strategy(config["hider_action_selection_strategy"])
+    if config["hider_action_selection_strategy"] == "EpsilonGreedy":
+        hider_action_selection = hider_action_selection(epsilon=config["seeker_initial_epsilon"])
     else:
         hider_action_selection = hider_action_selection(
-            epsilon=config['hider_initial_epsilon'], 
+            epsilon=config["hider_initial_epsilon"],
             decay_steps=config["total_episodes"],
-            min_epsilon=config['hider_min_epsilon']
+            min_epsilon=config["hider_min_epsilon"],
         )
 
-    hider_learning_algorithm = AlgorithmFactory.get_algorithm(config['hider_learning_algorithm'])
+    hider_learning_algorithm = AlgorithmFactory.get_algorithm(config["hider_learning_algorithm"])
     hider_learning_algorithm = hider_learning_algorithm(
-        discount_factor=config['hider_discount_factor'],
-        default_q_value=config['hider_default_q_value'], 
+        discount_factor=config["hider_discount_factor"],
+        default_q_value=config["hider_default_q_value"],
     )
-    if config['hider_learning_algorithm'] != "MonteCarlo":
-        hider_learning_algorithm.learning_rate = config['hider_learning_rate']
-    if config['hider_from_pretrained']:
+    if config["hider_learning_algorithm"] != "MonteCarlo":
+        hider_learning_algorithm.learning_rate = config["hider_learning_rate"]
+    if config["hider_from_pretrained"]:
         hider_learning_algorithm.load_prelearned_q_values(prelearned_q_values_hider)
 
     if config["hider_state"] == "HearingStateHider":
@@ -53,38 +63,38 @@ def main():
     hider_state_processor = StateFactory.get_hider_state(state_hider)
     hider_state_processor = hider_state_processor()
 
-    hider_reward_strategy = RewardFactory.get_reward(config['hider_reward'])
+    hider_reward_strategy = RewardFactory.get_reward(config["hider_reward"])
     hider_reward_strategy = hider_reward_strategy(AgentRole.HIDER)
 
     hider = Agent(
-        agent_role=AgentRole.HIDER, 
+        agent_role=AgentRole.HIDER,
         learning_algorithm=hider_learning_algorithm,
         action_selection_strategy=hider_action_selection,
         state_processor=hider_state_processor,
         reward_strategy=hider_reward_strategy,
     )
-    
-    # Create the seeker agent
-    seeker_action_selection = ActionSelectionFactory.get_strategy(config['seeker_action_selection_strategy'])
 
-    if config['seeker_action_selection_strategy'] == "EpsilonGreedy":
-        seeker_action_selection = seeker_action_selection(epsilon=config['seeker_initial_epsilon'])
+    # Create the seeker agent
+    seeker_action_selection = ActionSelectionFactory.get_strategy(config["seeker_action_selection_strategy"])
+
+    if config["seeker_action_selection_strategy"] == "EpsilonGreedy":
+        seeker_action_selection = seeker_action_selection(epsilon=config["seeker_initial_epsilon"])
     else:
         seeker_action_selection = seeker_action_selection(
-            epsilon=config['seeker_initial_epsilon'], 
+            epsilon=config["seeker_initial_epsilon"],
             decay_steps=config["total_episodes"],
-            min_epsilon=config['seeker_min_epsilon']
+            min_epsilon=config["seeker_min_epsilon"],
         )
 
-    seeker_learning_algorithm = AlgorithmFactory.get_algorithm(config['seeker_learning_algorithm'])
+    seeker_learning_algorithm = AlgorithmFactory.get_algorithm(config["seeker_learning_algorithm"])
     seeker_learning_algorithm = seeker_learning_algorithm(
-        discount_factor=config['seeker_discount_factor'],
-        default_q_value=config['seeker_default_q_value'],
+        discount_factor=config["seeker_discount_factor"],
+        default_q_value=config["seeker_default_q_value"],
     )
-    if config['seeker_learning_algorithm'] != "MonteCarlo":
-        seeker_learning_algorithm.learning_rate = config['seeker_learning_rate']
+    if config["seeker_learning_algorithm"] != "MonteCarlo":
+        seeker_learning_algorithm.learning_rate = config["seeker_learning_rate"]
 
-    if config['seeker_from_pretrained']:
+    if config["seeker_from_pretrained"]:
         seeker_learning_algorithm.load_prelearned_q_values(prelearned_q_values_seeker)
 
     if config["seeker_state"] == "HearingStateSeeker":
@@ -98,24 +108,24 @@ def main():
     seeker_state_processor = StateFactory.get_seeker_state(state_seeker)
     seeker_state_processor = seeker_state_processor()
 
-    seeker_reward_strategy = RewardFactory.get_reward(config['seeker_reward'])
+    seeker_reward_strategy = RewardFactory.get_reward(config["seeker_reward"])
     seeker_reward_strategy = seeker_reward_strategy(AgentRole.SEEKER)
 
     seeker = Agent(
-        agent_role=AgentRole.SEEKER, 
+        agent_role=AgentRole.SEEKER,
         learning_algorithm=seeker_learning_algorithm,
         action_selection_strategy=seeker_action_selection,
         state_processor=seeker_state_processor,
         reward_strategy=seeker_reward_strategy,
     )
-    
+
     board = Board(
         hider=hider,
         seeker=seeker,
     )
-    
+
     simulation_visualizer = SimulationVisualizer(
-        step_delay=config["step_delay"], 
+        step_delay=config["step_delay"],
         terminal_delay=config["terminal_delay"],
     )
 
@@ -131,13 +141,13 @@ def main():
             board=board,
             simulation_visualizer=simulation_visualizer,
             simulation_data_collector=simulation_data_collector,
-            )
+        )
     else:
         simulation = Simulation(
             board=board,
             simulation_data_collector=simulation_data_collector,
-            )
-    
+        )
+
     simulation.run()
 
 

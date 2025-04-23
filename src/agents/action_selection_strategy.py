@@ -4,9 +4,10 @@ from collections import defaultdict
 import random
 from typing import TYPE_CHECKING
 
-from agents.action import Action
+from src.agents.action import Action
+
 if TYPE_CHECKING:
-    from environment import BaseState
+    from src.agents import BaseState
 
 
 class ActionSelectionStrategy(ABC):
@@ -33,12 +34,7 @@ class EpsilonGreedy(ActionSelectionStrategy):
 
 
 class DecayEpsilonGreedy(ActionSelectionStrategy):
-    def __init__(
-            self, 
-            epsilon: float, 
-            min_epsilon: float, 
-            decay_steps: int
-            ) -> None:
+    def __init__(self, epsilon: float, min_epsilon: float, decay_steps: int) -> None:
         self.epsilon = epsilon
         self.min_epsilon = min_epsilon
         self.decay_steps = decay_steps
@@ -55,14 +51,14 @@ class DecayEpsilonGreedy(ActionSelectionStrategy):
                     max_value = q_values[state][action]
                     best_action = action
             action = best_action
-        
+
         # Linear decrease epsilon
         if self.step < self.decay_steps:
             self.epsilon -= (self.epsilon - self.min_epsilon) / (self.decay_steps - self.step)
             self.step += 1
-        
+
         return action
-    
+
 
 class ActionSelectionFactory:
     ACTION_SELECTION_STRATEGIES = {
