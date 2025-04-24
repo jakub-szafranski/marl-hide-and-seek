@@ -1,7 +1,7 @@
 [project]
-name = "hide-and-seek"
+name = "marl-h&s-simulator"
 version = "0.1.0"
-description = ""
+description = "Hide-and-Seek: A Multi-Agent Reinforcement Learning Simulator"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -15,18 +15,11 @@ dev = [
     "pytest>=7.3.1",
     "pytest-cov>=4.1.0",
     "ruff==0.11.4",
-    "mypy>=1.3.0",
-    "pre-commit>=3.3.2",
 ]
 
 [tool.ruff]
 target-version = "py311"
 line-length = 120
-
-[tool.mypy]
-python_version = "3.11"
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

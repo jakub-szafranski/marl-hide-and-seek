@@ -2,27 +2,28 @@
 # GAME ENVIRONMENT CONFIGURATION
 # ==================================================
 
-grid_width: 6
-grid_height: 6
+grid_width: 8
+grid_height: 8
 
 # Wall positions
 walls:
-  - [0, 0]
-  - [1, 0]
-  - [2, 2]
   - [1, 2]
   - [2, 1]
-  - [1, 4]
-  - [3, 4]
+  - [0, 2]
+  - [2, 2]
+  - [4, 3]
+  - [5, 3]
+  - [6, 3]
   - [4, 4]
-  - [5, 5]
-  - [5, 4]
-  - [4, 1]
+  - [4, 5]
+  - [4, 6]
+  - [4, 7]
 
 # Game parameters
-max_steps: 12  # Maximum steps per episode
-total_episodes: 300000  # Total number of training episodes
+max_steps: 20  # Maximum steps per episode
+total_episodes: 5000  # Total number of training episodes
 detection_distance: 2  # Seeker's detection range
+seed: 42  # Random seed
 
 # ==================================================
 # VISUALIZATION SETTINGS
@@ -36,28 +37,29 @@ terminal_delay: 5  # Delay after episode completion (in seconds)
 # ==================================================
 
 # Simulation data
-data_file_path: "simulation_data.json"  # Path for saving simulation data
+data_file_path: "data/simulation_data.json"  # Path for saving simulation data
 
 # Pretrained models
-hider_from_pretrained: false  # Load pretrained hider: false - no, true - yes
-hider_pretrained_file_name: "q_values_hider.json"  # Path to hider's Q-values if pretrained
+hider_from_pretrained: true  # Load pretrained hider: false - no, true - yes
+hider_pretrained_file_name: "data/q_values_hider_big.json"  # Path to hider's Q-values if pretrained
 
 seeker_from_pretrained: false  # Load pretrained seeker: false - no, true - yes
-seeker_pretrained_file_name: "q_values_seeker.json"  # Path to seeker's Q-values if pretrained
+seeker_pretrained_file_name: "data/q_values_seeker.json"  # Path to seeker's Q-values if pretrained
 
 # Output model paths
-hider_saving_file_path: "q_values_hider.json"  # Where to save trained hider's Q-values
-seeker_saving_file_path: "q_values_seeker.json"  # Where to save trained seeker's Q-values
+hider_saving_file_path: "data/q_values_hider.json"  # Where to save trained hider's Q-values
+seeker_saving_file_path: "data/q_values_seeker.json"  # Where to save trained seeker's Q-values
 
 # ==================================================
 # SEEKER AGENT CONFIGURATION
 # ==================================================
 
 # Learning parameters
-seeker_learning_algorithm: "QLearning"  # Learning algorithm
+seeker_learning_algorithm: "Sarsa"  # Learning algorithm
 seeker_learning_rate: 0.1  # Learning rate alpha
 seeker_discount_factor: 0.9  # Discount factor gamma
 seeker_default_q_value: 5  # Default Q-value for new state-action pairs
+seeker_n_steps: 5  # N steps for n-step algorithms
 
 # Action selection
 seeker_action_selection_strategy: "DecayEpsilonGreedy"  # Strategy for action selection
@@ -76,17 +78,18 @@ seeker_reward: "WinLoseReward"  # Options: "DurationReward", "WinLoseReward"
 
 # Learning parameters
 hider_learning_algorithm: "QLearning"  # Learning algorithm options: "QLearning", "Sarsa", "MonteCarlo"
-hider_learning_rate: 0.1  # Learning rate alpha (for QLearning and Sarsa only)
+hider_learning_rate: 0  # Learning rate alpha (for QLearning and Sarsa only)
 hider_discount_factor: 0.9  # Discount factor gamma
 hider_default_q_value: 5  # Default Q-value for new state-action pairs
+hider_n_steps: 5  # N steps for n-step algorithms
 
 # Action selection
-hider_action_selection_strategy: "DecayEpsilonGreedy"  # Options: "EpsilonGreedy", "DecayEpsilonGreedy"
-hider_initial_epsilon: 1  # Initial exploration rate
+hider_action_selection_strategy: "EpsilonGreedy"  # Options: "EpsilonGreedy", "DecayEpsilonGreedy"
+hider_initial_epsilon: 0  # Initial exploration rate
 hider_min_epsilon: 0  # Minimum exploration rate (for DecayEpsilonGreedy only)
 
 # State representation
-hider_state: "HearingStateHider"  # Options: "HearingStateHider", "DistanceStateHider", "CompleteKnowledgeState"
+hider_state: "CompleteKnowledgeState"  # Options: "HearingStateHider", "DistanceStateHider", "CompleteKnowledgeState"
 
 # Reward function
-hider_reward: "WinLoseReward"  # Options: "DurationReward", "WinLoseReward"
+hider_reward: "DurationReward"  # Options: "DurationReward", "WinLoseReward"
