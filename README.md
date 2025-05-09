@@ -1,51 +1,51 @@
-## Instrukcja uruchomienia symulacji
+## Simulation Setup Instructions
 
-W celu uruchomienia symulacji należy wykonać następujące kroki:
+To run the simulation, follow these steps:
 
-1. **Pobranie kodu z repozytorium:**
-   - Klonowanie repozytorium za pomocą polecenia:  
-     ```bash
-     git clone https://github.com/jakub-szafranski/praca-inzynierska.git
-     ```
-   - Przejście do katalogu projektu:  
-     ```bash
-     cd praca-inzynierska
-     ```
+1.  **Download the code from the repository:**
+    * Clone the repository using the command:
+        ```bash
+        git clone [https://github.com/jakub-szafranski/marl-hide-and-seek.git](https://github.com/jakub-szafranski/marl-hide-and-seek.git)
+        ```
+    * Navigate to the project directory:
+        ```bash
+        cd marl-hide-and-seek
+        ```
 
-2. **Sprawdzenie wersji Pythona:**
-   - Wykonanie polecenia:  
-     ```bash
-     python3 --version
-     ```
-     Należy upewnić się, że wyświetlona wersja to 3.11.6.
+2.  **Check Python version:**
+    * Execute the command:
+        ```bash
+        python3 --version
+        ```
+    * Ensure the displayed version is 3.11.6.
 
-3. **Tworzenie środowiska wirtualnego:**
-   - Wykonanie polecenia:  
-     ```bash
-     python3 -m venv venv
-     ```
+3.  **Create a virtual environment:**
+    * Execute the command:
+        ```bash
+        python3 -m venv venv
+        ```
 
-4. **Aktywacja środowiska wirtualnego:**
-   - Na Windows:  
-     ```bash
-     .\venv\Scripts\activate
-     ```
-   - Na Linux:  
-     ```bash
-     source venv/bin/activate
-     ```
+4.  **Activate the virtual environment:**
+    * On Windows:
+        ```bash
+        .\venv\Scripts\activate
+        ```
+    * On Linux:
+        ```bash
+        source venv/bin/activate
+        ```
 
-5. **Instalacja zależności:**
-   - Wykonanie polecenia:  
-     ```bash
-     pip install -r requirements.txt
-     ```
+5.  **Install dependencies:**
+    * Execute the command:
+        ```bash
+        pip install -r requirements.txt
+        ```
 
-6. **Konfiguracja parametrów środowiska:**
-   - W pliku `config.yml` należy dostosować parametry symulacji lub pozostawić domyślne.
+6.  **Configure environment parameters:**
+    * In the `config.yml` file, adjust the simulation parameters or leave them as default.
 
-7. **Uruchomienie programu:**
-   - Wykonanie polecenia:  
-     ```bash
-     python3 main.py
-     ```
+7.  **Run the program:**
+    * Execute the command:
+        ```bash
+        python3 main.py
+        ```
