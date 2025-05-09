@@ -25,20 +25,16 @@ To run the simulation, follow these steps:
         python3 -m venv venv
         ```
 
-4.  **Activate the virtual environment:**
-    * On Windows:
-        ```bash
-        .\venv\Scripts\activate
-        ```
-    * On Linux:
-        ```bash
-        source venv/bin/activate
-        ```
-
-5.  **Install dependencies:**
+4.  **Install uv:**
     * Execute the command:
         ```bash
-        pip install -r requirements.txt
+        pip install uv
+        ```
+
+5.  **Install dependencies using uv:**
+    * Execute the command:
+        ```bash
+        uv sync
         ```
 
 6.  **Configure environment parameters:**
@@ -47,5 +43,5 @@ To run the simulation, follow these steps:
 7.  **Run the program:**
     * Execute the command:
         ```bash
-        python3 main.py
+        uv run main.py
         ```
