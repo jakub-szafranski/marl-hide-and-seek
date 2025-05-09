@@ -1,5 +1,5 @@
 [project]
-name = "marl-h&s-simulator"
+name = "marl-hide-and-seek"
 version = "0.1.0"
 description = "Hide-and-Seek: A Multi-Agent Reinforcement Learning Simulator"
 readme = "README.md"
@@ -8,6 +8,7 @@ dependencies = [
     "pyyaml==6.0.2",
     "numpy==2.2.5",
     "matplotlib==3.10.1",
+    "pandas==2.2.3"
 ]
 
 [project.optional-dependencies]

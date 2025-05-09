@@ -56,7 +56,6 @@ class CompleteKnowledgeState(BaseState):
             board.hider.position.y,
             board.seeker.position.x,
             board.seeker.position.y,
-            len(board.seeker.trajectory),
         )
 
 
@@ -67,10 +66,10 @@ class DistanceStateSeeker(BaseState):
     def get_state(self, board: Board) -> tuple:
         seeker_position = board.seeker.position
         hider_position = board.hider.position
-        transition_number = len(board.seeker.directory)
+        # transition_number = len(board.seeker.directory)
         x_distance = seeker_position.x - hider_position.x
         y_distance = seeker_position.y - hider_position.y
-        return (x_distance, y_distance, transition_number, seeker_position.x, seeker_position.y)
+        return (x_distance, y_distance, seeker_position.x, seeker_position.y)
 
 
 class DistanceStateHider(BaseState):
@@ -106,7 +105,7 @@ class HearingStateHider(BaseState):
             is_below = 1 if seeker_y < hider_y else 0
             is_right = 1 if seeker_x > hider_x else 0
             is_left = 1 if seeker_x < hider_x else 0
-        return (is_above, is_below, is_right, is_left, transition_number, hider_x, hider_y)
+        return (is_above, is_below, is_right, is_left, hider_x, hider_y)
 
 
 class HearingStateSeeker(BaseState):
@@ -129,7 +128,7 @@ class HearingStateSeeker(BaseState):
             is_below = 1 if seeker_y > hider_y else 0
             is_right = 1 if seeker_x < hider_x else 0
             is_left = 1 if seeker_x > hider_x else 0
-        return (is_above, is_below, is_right, is_left, transition_number, seeker_x, seeker_y)
+        return (is_above, is_below, is_right, is_left, seeker_x, seeker_y)
 
 
 class StateFactory:

@@ -61,20 +61,21 @@ class QLearning(LearningAlgorithm):
         discount_factor: float,
         default_q_value: float,
         learning_rate: float = 0.1,
+        n_steps: int = 1,
     ) -> None:
         super().__init__(discount_factor, default_q_value)
         self.learning_rate = learning_rate
+        self.n_steps = n_steps
 
     def update(self, trajectory: Trajectory) -> None:
-        n_steps = 1
         number_of_transitions = len(trajectory)
         is_terminal = trajectory.transitions[-1].is_terminal
 
         # If the trajectory is not long enough, do not update the Q-values
-        if number_of_transitions < n_steps and not is_terminal:
+        if number_of_transitions < self.n_steps and not is_terminal:
             return None
 
-        n_step_trajectory = trajectory.get_sub_trajectory(n_steps)
+        n_step_trajectory = trajectory.get_sub_trajectory(self.n_steps)
         if is_terminal:
             for index, transition in enumerate(n_step_trajectory.transitions):
                 self._update_q_values(n_step_trajectory[index:], is_terminal)
@@ -105,20 +106,21 @@ class Sarsa(LearningAlgorithm):
         discount_factor: float,
         default_q_value: float,
         learning_rate: float = 0.1,
+        n_steps: int = 1,
     ) -> None:
         super().__init__(discount_factor, default_q_value)
         self.learning_rate = learning_rate
+        self.n_steps = n_steps
 
     def update(self, trajectory: Trajectory) -> None:
-        n_steps = 1
         number_of_transitions = len(trajectory)
         is_terminal = trajectory.transitions[-1].is_terminal
 
         # If the trajectory is not long enough, do not update the Q-values
-        if number_of_transitions < n_steps + 1 and not is_terminal:
+        if number_of_transitions < self.n_steps + 1 and not is_terminal:
             return None
 
-        n_step_trajectory = trajectory.get_sub_trajectory(n_steps + 1)
+        n_step_trajectory = trajectory.get_sub_trajectory(self.n_steps + 1)
         if is_terminal:
             for index, transition in enumerate(n_step_trajectory.transitions):
                 self._update_q_values(n_step_trajectory[index:], is_terminal)

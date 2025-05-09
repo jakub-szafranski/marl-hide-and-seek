@@ -25,7 +25,7 @@ def _create_action_selection(strategy_name, initial_epsilon, decay_steps=None, m
         )
 
 
-def _create_learning_algorithm(algorithm_name, discount_factor, default_q_value, 
+def _create_learning_algorithm(algorithm_name, discount_factor, default_q_value, n_steps,
                              learning_rate=None, prelearned_q_values=None):
     algorithm = AlgorithmFactory.get_algorithm(algorithm_name)(
         discount_factor=discount_factor,
@@ -34,6 +34,7 @@ def _create_learning_algorithm(algorithm_name, discount_factor, default_q_value,
     
     if algorithm_name != "MonteCarlo" and learning_rate is not None:
         algorithm.learning_rate = learning_rate
+        algorithm.n_steps = n_steps
         
     if prelearned_q_values:
         algorithm.load_prelearned_q_values(prelearned_q_values)
@@ -67,6 +68,7 @@ def create_agent_from_config(role, config_prefix, config):
         config[f"{config_prefix}_learning_algorithm"],
         config[f"{config_prefix}_discount_factor"],
         config[f"{config_prefix}_default_q_value"],
+        config[f"{config_prefix}_n_steps"],
         config[f"{config_prefix}_learning_rate"],
         prelearned_q_values
     )

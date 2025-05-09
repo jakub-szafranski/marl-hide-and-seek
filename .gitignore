@@ -53,3 +53,6 @@ wandb/
 
 # Package management
 uv.lock
+
+# Environment data
+*.json

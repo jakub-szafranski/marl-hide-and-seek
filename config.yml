@@ -1,95 +1,59 @@
-# ==================================================
-# GAME ENVIRONMENT CONFIGURATION
-# ==================================================
-
-grid_width: 8
+data_file_path: data/simulation_data.json
+detection_distance: 2
 grid_height: 8
-
-# Wall positions
+grid_width: 8
+hider_action_selection_strategy: EpsilonGreedy
+hider_default_q_value: 5
+hider_discount_factor: 0.9
+hider_from_pretrained: true
+hider_initial_epsilon: 0
+hider_learning_algorithm: QLearning
+hider_learning_rate: 0
+hider_min_epsilon: 0
+hider_n_steps: 5
+hider_pretrained_file_name: data/q_values_hider_big.json
+hider_reward: DurationReward
+hider_saving_file_path: data/q_values_hider.json
+hider_state: CompleteKnowledgeState
+max_steps: 20
+seed: 42
+seeker_action_selection_strategy: DecayEpsilonGreedy
+seeker_default_q_value: 5
+seeker_discount_factor: 0.9
+seeker_from_pretrained: false
+seeker_initial_epsilon: 1
+seeker_learning_algorithm: QLearning
+seeker_learning_rate: 0.1
+seeker_min_epsilon: 0
+seeker_n_steps: 5
+seeker_pretrained_file_name: data/q_values_seeker.json
+seeker_reward: WinLoseReward
+seeker_saving_file_path: data/q_values_seeker.json
+seeker_state: CompleteKnowledgeState
+step_delay: 0.1
+terminal_delay: 5
+total_episodes: 5000
+visualize: false
 walls:
-  - [1, 2]
-  - [2, 1]
-  - [0, 2]
-  - [2, 2]
-  - [4, 3]
-  - [5, 3]
-  - [6, 3]
-  - [4, 4]
-  - [4, 5]
-  - [4, 6]
-  - [4, 7]
-
-# Game parameters
-max_steps: 20  # Maximum steps per episode
-total_episodes: 5000  # Total number of training episodes
-detection_distance: 2  # Seeker's detection range
-seed: 42  # Random seed
-
-# ==================================================
-# VISUALIZATION SETTINGS
-# ==================================================
-visualize: false  # Whether to visualize the game: false - no, true - yes
-step_delay: 0.1  # Delay for each step (in seconds)
-terminal_delay: 5  # Delay after episode completion (in seconds)
-
-# ==================================================
-# DATA MANAGEMENT
-# ==================================================
-
-# Simulation data
-data_file_path: "data/simulation_data.json"  # Path for saving simulation data
-
-# Pretrained models
-hider_from_pretrained: true  # Load pretrained hider: false - no, true - yes
-hider_pretrained_file_name: "data/q_values_hider_big.json"  # Path to hider's Q-values if pretrained
-
-seeker_from_pretrained: false  # Load pretrained seeker: false - no, true - yes
-seeker_pretrained_file_name: "data/q_values_seeker.json"  # Path to seeker's Q-values if pretrained
-
-# Output model paths
-hider_saving_file_path: "data/q_values_hider.json"  # Where to save trained hider's Q-values
-seeker_saving_file_path: "data/q_values_seeker.json"  # Where to save trained seeker's Q-values
-
-# ==================================================
-# SEEKER AGENT CONFIGURATION
-# ==================================================
-
-# Learning parameters
-seeker_learning_algorithm: "Sarsa"  # Learning algorithm
-seeker_learning_rate: 0.1  # Learning rate alpha
-seeker_discount_factor: 0.9  # Discount factor gamma
-seeker_default_q_value: 5  # Default Q-value for new state-action pairs
-seeker_n_steps: 5  # N steps for n-step algorithms
-
-# Action selection
-seeker_action_selection_strategy: "DecayEpsilonGreedy"  # Strategy for action selection
-seeker_initial_epsilon: 1  # Initial exploration rate
-seeker_min_epsilon: 0  # Minimum exploration rate
-
-# State representation
-seeker_state: "HearingStateSeeker"  # Options: "HearingStateSeeker", "DistanceStateSeeker", "CompleteKnowledgeState"
-
-# Reward function
-seeker_reward: "WinLoseReward"  # Options: "DurationReward", "WinLoseReward"
-
-# ==================================================
-# HIDER AGENT CONFIGURATION
-# ==================================================
-
-# Learning parameters
-hider_learning_algorithm: "QLearning"  # Learning algorithm options: "QLearning", "Sarsa", "MonteCarlo"
-hider_learning_rate: 0  # Learning rate alpha (for QLearning and Sarsa only)
-hider_discount_factor: 0.9  # Discount factor gamma
-hider_default_q_value: 5  # Default Q-value for new state-action pairs
-hider_n_steps: 5  # N steps for n-step algorithms
-
-# Action selection
-hider_action_selection_strategy: "EpsilonGreedy"  # Options: "EpsilonGreedy", "DecayEpsilonGreedy"
-hider_initial_epsilon: 0  # Initial exploration rate
-hider_min_epsilon: 0  # Minimum exploration rate (for DecayEpsilonGreedy only)
-
-# State representation
-hider_state: "CompleteKnowledgeState"  # Options: "HearingStateHider", "DistanceStateHider", "CompleteKnowledgeState"
-
-# Reward function
-hider_reward: "DurationReward"  # Options: "DurationReward", "WinLoseReward"
+- - 1
+  - 2
+- - 2
+  - 1
+- - 0
+  - 2
+- - 2
+  - 2
+- - 4
+  - 3
+- - 5
+  - 3
+- - 6
+  - 3
+- - 4
+  - 4
+- - 4
+  - 5
+- - 4
+  - 6
+- - 4
+  - 7
