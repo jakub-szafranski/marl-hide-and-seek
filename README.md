@@ -1,4 +1,4 @@
-## Simulation Setup Instructions
+## Simulation Setup
 
 To run the simulation, follow these steps:
 
