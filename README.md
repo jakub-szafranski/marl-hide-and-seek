@@ -5,7 +5,7 @@ To run the simulation, follow these steps:
 1.  **Download the code from the repository:**
     * Clone the repository using the command:
         ```bash
-        git clone [https://github.com/jakub-szafranski/marl-hide-and-seek.git](https://github.com/jakub-szafranski/marl-hide-and-seek.git)
+        git clone https://github.com/jakub-szafranski/marl-hide-and-seek
         ```
     * Navigate to the project directory:
         ```bash
