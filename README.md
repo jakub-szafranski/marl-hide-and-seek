@@ -11,36 +11,22 @@ To run the simulation, follow these steps:
         ```bash
         cd marl-hide-and-seek
         ```
-
-2.  **Check Python version:**
-    * Execute the command:
-        ```bash
-        python3 --version
-        ```
-    * Ensure the displayed version is 3.11.6.
-
-3.  **Create a virtual environment:**
-    * Execute the command:
-        ```bash
-        python3 -m venv venv
-        ```
-
-4.  **Install uv:**
+2.  **Install uv:**
     * Execute the command:
         ```bash
         pip install uv
         ```
 
-5.  **Install dependencies using uv:**
+3.  **Install dependencies using uv:**
     * Execute the command:
         ```bash
         uv sync
         ```
 
-6.  **Configure environment parameters:**
+4.  **Configure environment parameters:**
     * In the `config.yml` file, adjust the simulation parameters or leave them as default.
 
-7.  **Run the program:**
+5.  **Run the program:**
     * Execute the command:
         ```bash
         uv run main.py
